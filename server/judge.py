@@ -51,12 +51,14 @@ class judge(object):
         >>> judge.is_data_valid(data)
         True
         """
-        if 'first_name' not in data_dictionary or type(data_dictionary['first_name']) != str:
-            return False
-        if 'last_name' not in data_dictionary or type(data_dictionary['last_name']) != str:
-            return False
-        if 'spreading' not in data_dictionary or type(data_dictionary['spreading']) != float:
-            return False
-        if 'T' not in data_dictionary or type(data_dictionary['T']) != float: #Why does this not work? 'T' : 2
-            return False
-        return True
+        def helper(key, variable_type):
+            """A function which given a KEY and a VARIBALE_TYPE checks if there is a key with a value of that type
+            in DATA_DICTIONARY"""
+            if key not in data_dictionary or type(data_dictionary[key]) != variable_type:
+                return False
+            return True
+        fields = [ ['first_name' , str], ['last_name', str], ['spreading', float], ['T', float] ]
+        is_valid = True
+        for key, variable_type in fields:
+            is_valid = is_valid and helper(key, variable_type)
+        return is_valid
