@@ -1,17 +1,33 @@
-"""Class repersenting a debate judge"""
+"""File for repersenting firebase data"""
 # TODO intelligent error checking
 from global_vars import db
-class judge(object):
+from global_vars import last_upload
+class fb_object(object):
+    """Abstract class for anything repersented in the database such as an upload or a judge"""
+    def __init__(self, guid, type):
+        """Takes in a str GUID and a string TYPE and fetches all the data from fb"""
+        self.guid = guid
+        self.data = db.child(type).child(self.guid).get().val()
+        self.does_exist = True
+        if not self.exists():
+            self.does_exist = False
+            return None
+    def exists(self):
+        """Checks if the object exists in the database"""
+        if self.data:
+            return True
+        return False
+class judge(fb_object):
     def __init__(self, judge_id):
         """Constructor for judges"""
         # judge_id is a GUID for each judge
-        self.judge_id = judge_id
-        # query database at this point
-        self.data = db.child("judges").child(judge_id).get().val()
+        super().__init__(judge_id, 'judges')
+        if not self.does_exist:
+            return None
         self.first_name = self.data['first_name']
         self.last_name = self.data['last_name']
         self.spreading = float(self.data['spreading'])
-        self.T = float(self.data['T'])
+        self.phil = self.data['phil']
         # TODO more metrics
     @classmethod
     def create_new_judge(cls, data):
@@ -29,6 +45,7 @@ class judge(object):
         return None
     @staticmethod
     def is_data_valid(data_dictionary):
+        # TODO update doctests
         """A function which checks that DATA_DICTIONARY has all the keys a judge object should have
 
         >>> first = "john"
@@ -57,8 +74,42 @@ class judge(object):
             if key not in data_dictionary or type(data_dictionary[key]) != variable_type:
                 return False
             return True
-        fields = [ ['first_name' , str], ['last_name', str], ['spreading', float], ['T', float] ]
+        fields = [ ['first_name' , str], ['last_name', str], ['spreading', float], ['phil', str ] ]
         is_valid = True
         for key, variable_type in fields:
             is_valid = is_valid and helper(key, variable_type)
         return is_valid
+class upload(fb_object):
+    def __init__(self, upload_id):
+        """This takes in an UPLOAD_ID and fetches all data for that upload from fb"""
+        super().__init__(upload_id, 'user_uploads')
+        if not self.does_exist:
+            print(upload_id)
+            return None
+        self.user = self.data['user']
+        # Have indiviudal fields for all judge info or one dict?
+    def upload_exists(self):
+        if self.data:
+            return True
+        return False
+    @classmethod
+    def get_next_upload(cls):
+        #TODO DRY
+        #TODO make this not cancer
+        #TODO Error checking
+        global last_upload
+        last_upload += 1
+        try:
+            return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
+        except Exception as e:
+            last_upload -= 1
+            return None
+        return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
+    @staticmethod
+    def get_all_new_uploads():
+        next_up = upload.get_next_upload()
+        all_ups = []
+        while next_up:
+            all_ups.append(next_up)
+            next_up = upload.get_next_upload()
+        return all_ups
