@@ -27,11 +27,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-<<<<<<< HEAD
-
-=======
-.controller('rr-tCtrl', function($scope, $state) {})
->>>>>>> c8361684f2c5d53d6f2dc59fb76767b4cabb494d
 
 .controller('rrCtrl', function($scope, $state) {
 
