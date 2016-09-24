@@ -30,8 +30,8 @@
           <h1 class="title">Affirmative Type:</h1>
         </ion-item>
         <ion-item>
-          <ion-radio ng-model="judge.trad_aff" name="aff_group">Traditional Aff</ion-radio>
-          <ion-radio ng-model="judge.k_aff" name="aff_group">Kritikal Aff</ion-radio>
+          <ion-radio ng-model="judge.aff_type" name="aff_group" value="aff_trad">Traditional Aff</ion-radio>
+          <ion-radio ng-model="judge.aff_type" name="aff_group" value="aff_k">Kritikal Aff</ion-radio>
         </ion-item>
       </ion-list>
 
@@ -40,11 +40,11 @@
           <h1 class="title">2NR Choice:</h1>
         </ion-item>
         <ion-item>
-          <ion-radio ng-model="judge.t" name="2nr_group">Topicality</ion-radio>
-          <ion-radio ng-model="judge.k" name="2nr_group">Kritik</ion-radio>
-          <ion-radio ng-model="judge.cp" name="2nr_group">Counterplan</ion-radio>
-          <ion-radio ng-model="judge.da" name="2nr_group">Disadvantage</ion-radio>
-          <ion-radio ng-model="judge.it" name="2nr_group">Impact Turn</ion-radio>
+          <ion-radio ng-model="judge.neg_choice" name="2nr_group" value="t">Topicality</ion-radio>
+          <ion-radio ng-model="judge.neg_choice" name="2nr_group" value="k">Kritik</ion-radio>
+          <ion-radio ng-model="judge.neg_choice" name="2nr_group" value="cp">Counterplan</ion-radio>
+          <ion-radio ng-model="judge.neg_choice" name="2nr_group" value="da">Disadvantage</ion-radio>
+          <ion-radio ng-model="judge.neg_choice" name="2nr_group" value="it">Impact Turn</ion-radio>
         </ion-item>
       </ion-list>
 
@@ -53,12 +53,12 @@
           <h1 class="title">Winner:</h1>
         </ion-item>
         <ion-item>
-          <ion-radio ng-model="judge.aff" name="decision_group">Affirmative</ion-radio>
-          <ion-radio ng-model="judge.neg" name="decision_group">Negative</ion-radio>
+          <ion-radio ng-model="judge.winner" name="decision_group" value="aff_win">Affirmative</ion-radio>
+          <ion-radio ng-model="judge.winner" name="decision_group" value="neg_win">Negative</ion-radio>
         </ion-item>
       </ion-list>
 
-      <button ng-click="rrNext()" class="button button-block button-positive">
+      <button ng-click="rrNext(judge)" class="button button-block button-positive">
         Next
       </button>
 
