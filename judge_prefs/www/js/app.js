@@ -106,4 +106,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-});
+})
+//adding the Authentication object which should allow us to authenticate users 
+.controller("MyAuthCtrl", ["$scope","$firebaseAuth",
+ function($scope,$firebaseAuth){
+  var ref = new Firebase("https://judge-prefs.firebaseio.com");
+  $scope.authObj = $firebaseAuth(ref);
+ }
+]);
