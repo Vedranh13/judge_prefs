@@ -120,7 +120,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   var ref = new Firebase("https://judge-prefs.firebaseio.com");
   $scope.authObj = $firebaseAuth(ref);
  }
-])
+]).factory("Items", function($firebaseArray) {
+  var itemsRef = new Firebase("https://judge-prefs.firebaseio.com/");
+  return $firebaseArray(itemsRef);
+})
+;
 //.initializeApp({
 //    serviceAccount: {
 //        projectId: "judge-prefs",
@@ -129,4 +133,3 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 //        },
 //        databaseURL:"https://judge-prefs.firebaseio.com"
 //    });
-;

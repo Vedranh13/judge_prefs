@@ -27,22 +27,28 @@ angular.module('starter.controllers', [])
   };
 })
 
-<<<<<<< HEAD
-.controller('searchCtrl', function($scope) {
+.controller('rr-tCtrl', function($scope, $rootScope) {
+  $scope.judgetwo = {};
 
+  $scope.rrSubmit = function(judgetwo) {
+    if (judgetwo.rfd) {
+      $rootScope.judge.rfd = judgetwo.rfd;
+      $rootScope.judge.comments = judgetwo.comments;
+    }
+    else {
+      alert("Please input the reason for decision.");
+    }
+  };
 })
-=======
-.controller('rr-tCtrl', function($scope, $state) {})
->>>>>>> 51b1d40e88dc89aa2ca8d2ac3f219f8c6506c1e6
 
-.controller('rrCtrl', function($scope, $state) {
+.controller('rrCtrl', function($scope, $state, $rootScope) {
 
   $scope.judge = {};
 
   $scope.rrNext = function(judge) {
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
-      outputter.setOutput(judge);
+      $rootScope.judge = judge;
       switch (judge.neg_choice) {
         case "t":
           $state.go('rr-t');
