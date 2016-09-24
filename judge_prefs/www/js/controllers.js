@@ -27,7 +27,17 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('rr-tCtrl', function($scope, $state) {})
+.controller('rr-tCtrl', function($scope, $state) {
+  $scope.judgetwo = {};
+
+  $scope.rrSubmit = function(judgetwo) {
+    if (judgetwo.rfd) {
+    }
+    else {
+      alert("Please input the reason for decision.");
+    }
+  }
+})
 
 .controller('rrCtrl', function($scope, $state) {
 
@@ -36,7 +46,6 @@ angular.module('starter.controllers', [])
   $scope.rrNext = function(judge) {
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
-      outputter.setOutput(judge);
       switch (judge.neg_choice) {
         case "t":
           $state.go('rr-t');
