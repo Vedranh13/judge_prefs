@@ -5,6 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
+//var firebase = require('firebase')
+//    firebase.initializeApp({
+//        serviceAccount:"judge_prefs/judge_prefs/judge-prefs-56455ec1c8cc.json"
+//        databaseURL: "https://judge-prefs.firebaseio.com"
+//        });
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
 
 .run(function($ionicPlatform) {
@@ -16,6 +21,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       cordova.plugins.Keyboard.disableScroll(true);
 
     }
+    starter.initializeApp({
+        serviceAccount: {
+            projectId: "judge-prefs",
+            clientEmail: "fb-data@judge-prefs.iam.gserviceaccount.com",
+  PrivateKey: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1yMqDaqKVVxIg\nw5bX4uBUok3aNvvFDGn8nzf5R3I6BSHAPIhGYu8EsIhjvW63++V/jQctJjND80u3\n2T/RLJA4e7DqRZ+AfaV/vMjl36S++QgdraRgDxCDNcYknY7OQx5ov3UoFRa+AMM9\nnj3sZlpLVQNcfLdGexlulb0ix7b+wOfc0QXBirkesv5dnznIE6QsJl3KX/i38a+U\nKC0n65aId366DhfP7g4oGodEQDjbZ/5Fh1RwyX8LY07RhLK1+yDoyzOyZjD+tjFj\nZKFXbvWaJanJz7JQ3wQoNPixYdPu/fyOrmoubtqBGarafeAAmL/LD/3L49alA7iT\nkIJCQA6zAgMBAAECggEAHFvmu/m2w3WB7nqU3bkXJhzr6E8LmAIHxtFP+iObPlHu\nof7Pg6uLfj/MB0NWMn2pn+xwYirDdKZP+a56tjctiKJDR0j1SSZQ20yoSrRJD0Hq\ncjbUnee7u7x33N53mNX/uHel30rq8VlNHB/DqU2OaJIqpBMQxH4PyaCykOp3MebC\n2UzQpGX9XKw+/X887dyfnsofh7h23r2ZfXbWEWGJLejw6eqaSlmzXj9Znjz+7dcQ\nWjGKXLwf3tU0ouB441M17q6jDQwAqpDiUG3A8c2BekXdYVrDns7eyb3ad8fm94Ae\niWA33hjUmFeb1c5eYNPsRQ6WZiCYD2gZMgVB0SYWAQKBgQDkm/RG84GHKVJJYXli\nkSq/DSzNk48FXUyC5dDaBm9Vp87XwtBpQE4VrXEDIWZy/ndFfCbCpKRQb/vjmtTj\n6WmLWCf/jsFfC7WN9L36SnrGSgXV26xNL2LVV31cdf0wyL22JBkQiuBmI4HnIp5a\nqI9CAcviwnQ/c/S+ika3ZMqOwwKBgQDLkJhj1RTE6+w7wH+4cFxWnO2WLWbR6/Xl\nF7KUOiI/sIfUkMr/XQvLz4bdiT7NNCBxCwhRVwACQ4ovt/YF/YrxQs052yd7P+JE\n2gRdWLYBcmTxy+GRXFCTKCNF9NLXPumWtFRq6HJX5ExXnS0jNe0enOziB6iGXYYl\n2g2aOpthUQKBgQDcLLOs7fOPSKXe1MlCvEtuK/M9n2M8qGn7G/n1MgNifLcDKLbu\n16ccy6mveSihkiEvQ+5UwpsaeXAg+ssVIoWrVeFYCZaFwtI+ATxDZh4vAbXzDZo5\n0Gygyp2LQnvy0zOby9J0Ez0iQgpnoPjgmb03tmE2aU/qmPRb2vNWx/UqXwKBgQDG\nhtdIDah6wIecYoltLA+x3MwM+WxccF5YtbrQur1qFdTypt+DGpCFjXg/GDmqURsO\nhC7xfQKiMpJTJXsHrpTR5E9YDHa9ybj3YxR8oSan1JPECQ2NAVYHnk6ATFtP1qhi\n9K2bseTJ+PnHPJ+nxlDh2TNg4Q0nNZC926IGdv/QcQKBgHLEQjETyhKe07DIEyvN\nY+A8Ua+M7t0Y3+kunirioznaghfZSppQXwUp4hmLXug5fLIPsroQaG5SJyRx5cku\n5IbpE0789kiLYkvDWMp6x8Qbht3oBlNg1Kr8/RJ0aTNpuQklddtGWdFhheokRwg7\nCdMqsbQDA0wbkrT8x6AHXba+\n-----END PRIVATE KEY-----\n"
+            },
+            databaseURL:"https://judge-prefs.firebaseio.com"
+        });
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
@@ -30,6 +43,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
+
+  .state('rr-t', {
+      url: "/rr-t",
+      templateUrl: "templates/rr-t.html",
+      controller: "rr-tCtrl"
+    })
 
   // setup an abstract state for the tabs directive
     .state('tab', {

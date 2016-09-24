@@ -17,8 +17,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('rrCtrl', function($scope) {})
-
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
@@ -29,6 +27,8 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('rr-tCtrl', function($scope, $state) {})
+
 .controller('rrCtrl', function($scope, $state) {
 
   $scope.judge = {};
@@ -38,19 +38,7 @@ angular.module('starter.controllers', [])
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
       switch (judge.neg_choice) {
         case "t":
-          $state.go('tab-rr-t');
-          break;
-        case "k":
-          $state.go('tab-rr-k');
-          break;
-        case "cp":
-          $state.go('tab-rr-cp');
-          break;
-        case "da":
-          $state.go('tab-rr-da');
-          break;
-        case "it":
-          $state.go('tab-rr-it');
+          $state.go('rr-t');
           break;
       }
     }
