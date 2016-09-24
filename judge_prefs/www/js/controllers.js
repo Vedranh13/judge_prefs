@@ -27,6 +27,13 @@ angular.module('starter.controllers', [])
   };
 })
 
+<<<<<<< HEAD
+.controller('searchCtrl', function($scope) {
+
+})
+=======
+.controller('rr-tCtrl', function($scope, $state) {})
+>>>>>>> 51b1d40e88dc89aa2ca8d2ac3f219f8c6506c1e6
 
 .controller('rrCtrl', function($scope, $state) {
 
@@ -35,6 +42,7 @@ angular.module('starter.controllers', [])
   $scope.rrNext = function(judge) {
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
+      outputter.setOutput(judge);
       switch (judge.neg_choice) {
         case "t":
           $state.go('rr-t');
