@@ -93,9 +93,23 @@ class upload(fb_object):
             return True
         return False
     @classmethod
-    def get_upload(cls):
+    def get_next_upload(cls):
         #TODO DRY
         #TODO make this not cancer
+        #TODO Error checking
         global last_upload
         last_upload += 1
+        try:
+            return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
+        except Exception as e:
+            last_upload -= 1
+            return None
         return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
+    @staticmethod
+    def get_all_new_uploads():
+        next_up = upload.get_next_upload()
+        all_ups = []
+        while next_up:
+            all_ups.append(next_up)
+            next_up = upload.get_next_upload()
+        return all_ups
