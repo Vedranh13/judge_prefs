@@ -5,11 +5,6 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-//var firebase = require('firebase')
-//    firebase.initializeApp({
-//        serviceAccount:"judge_prefs/judge_prefs/judge-prefs-56455ec1c8cc.json"
-//        databaseURL: "https://judge-prefs.firebaseio.com"
-//        });
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
 
 .run(function($ionicPlatform) {
@@ -127,4 +122,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-});
+})
+//adding the Authentication object which should allow us to authenticate users 
+.controller("MyAuthCtrl", ["$scope","$firebaseAuth",
+ function($scope,$firebaseAuth){
+  var ref = new Firebase("https://judge-prefs.firebaseio.com");
+  $scope.authObj = $firebaseAuth(ref);
+ }
+]);
