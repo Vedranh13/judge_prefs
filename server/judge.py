@@ -87,6 +87,9 @@ class upload(fb_object):
             print(upload_id)
             return None
         self.user = self.data['user']
+        self.judge_first_name = self.data['judge_first_name']
+        self.judge_last_name = self.data['judge_last_name']
+        self.speed_pref = self.data['speed_pref']
         # Have indiviudal fields for all judge info or one dict?
     def upload_exists(self):
         if self.data:
@@ -113,3 +116,6 @@ class upload(fb_object):
             all_ups.append(next_up)
             next_up = upload.get_next_upload()
         return all_ups
+    def which_judge(self):
+        """This method returns a judge object indicating which judge this upload is refering to"""
+        return judge.init_judge_with_name(self.judge_first_name, self.judge_last_name)
