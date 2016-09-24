@@ -8,7 +8,7 @@
 //var firebase = require('firebase')
 //    firebase.initializeApp({
 //        serviceAccount:"judge_prefs/judge_prefs/judge-prefs-56455ec1c8cc.json"
-//        databaseURL: "https://judge-prefs.firebaseio.com" 
+//        databaseURL: "https://judge-prefs.firebaseio.com"
 //        });
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
 
@@ -45,14 +45,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
 
   .state('rr-t', {
-    url: '/rr-t',
-    views: {
-      'rr-t': {
-        templateUrl: 'templates/tab-rr.html',
-        controller: 'rrCtrl'
-      }
-    }
-  })
+      url: "/rr-t",
+      templateUrl: "templates/rr-t.html",
+      controller: "rr-tCtrl"
+    })
 
   // setup an abstract state for the tabs directive
     .state('tab', {

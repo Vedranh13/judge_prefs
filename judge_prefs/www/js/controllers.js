@@ -27,6 +27,8 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('rr-tCtrl', function($scope, $state) {})
+
 .controller('rrCtrl', function($scope, $state) {
 
   $scope.judge = {};
@@ -36,7 +38,7 @@ angular.module('starter.controllers', [])
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
       switch (judge.neg_choice) {
         case "t":
-          alert("Works");
+          $state.go('rr-t');
           break;
       }
     }
@@ -44,4 +46,4 @@ angular.module('starter.controllers', [])
       alert("Please fill out all fields.");
     }
   };
-})
+});
