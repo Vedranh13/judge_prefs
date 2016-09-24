@@ -45,10 +45,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
 
   .state('rr-t', {
-      url: "/rr-t",
-      templateUrl: "templates/rr-t.html",
-      controller: "rr-tCtrl"
-    })
+    url: '/rr-t',
+    views: {
+      'rr-t': {
+        templateUrl: 'templates/tab-rr.html',
+        controller: 'rrCtrl'
+      }
+    }
+  })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
@@ -97,6 +101,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+
+    .state('tab.search', {
+      url: '/search',
+      views: {
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
+          controller: 'searchCtrl'
+        }
+      }
+    })
+
+
 
   .state('tab.account', {
     url: '/account',

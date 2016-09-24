@@ -27,6 +27,9 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('searchCtrl', function($scope) {
+
+})
 
 .controller('rrCtrl', function($scope, $state) {
 
