@@ -38,7 +38,7 @@ angular.module('starter.controllers', [])
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
       switch (judge.neg_choice) {
         case "t":
-          $state.go('tab-rr-t');
+          $state.go('tab.rr-t');
           break;
         case "k":
           $state.go('tab-rr-k');
