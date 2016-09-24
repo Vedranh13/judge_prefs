@@ -27,22 +27,26 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('rr-itCtrl', function($scope, $rootScope) {
+.controller('rr-itCtrl', function($scope, $rootScope, $state) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
     $rootScope.judge.rfd = "-1";
+    alert("Round report submitted.")
+    $state.go('tab.dash');
   };
 })
 
-.controller('rr-tCtrl', function($scope, $rootScope) {
+.controller('rr-tCtrl', function($scope, $rootScope, $state) {
   $scope.judgetwo = {};
 
   $scope.rrSubmit = function(judgetwo) {
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
+      alert("Round report submitted.")
+      $state.go('tab-dash');
     }
     else {
       alert("Please input the reason for decision.");
