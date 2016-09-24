@@ -27,12 +27,8 @@ angular.module('starter.controllers', [])
   };
 })
 
-<<<<<<< HEAD
-.controller('searchCtrl', function($scope) {
-=======
 .controller('rr-tCtrl', function($scope, $rootScope) {
   $scope.judgetwo = {};
->>>>>>> bf9104c89c137a7806ba3f2d6728c8c611bd091f
 
   $scope.rrSubmit = function(judgetwo) {
     if (judgetwo.rfd) {
@@ -44,10 +40,6 @@ angular.module('starter.controllers', [])
     }
   };
 })
-<<<<<<< HEAD
-.controller('rr-tCtrl', function($scope, $state) {})
-=======
->>>>>>> bf9104c89c137a7806ba3f2d6728c8c611bd091f
 
 .controller('rrCtrl', function($scope, $state, $rootScope) {
 
