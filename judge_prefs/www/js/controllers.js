@@ -46,7 +46,7 @@ angular.module('starter.controllers', [])
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
       alert("Round report submitted.");
-      $state.go('tab-dash');
+      $state.go('tab.dash');
     }
     else {
       alert("Please input the reason for decision.");
