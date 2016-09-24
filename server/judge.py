@@ -41,6 +41,54 @@ class judge(fb_object):
         self.data[field] = new_value
         db.child('judges').child(self.guid).update({field :  new_value })
     @classmethod
+    def create_blank_judge(cls, first_name, last_name):
+        """Creates a blank judge given a name"""
+        data = {
+        "first_name" : first_name,
+        "last_name" : last_name,
+        "spreading" : 0.0,
+        "num_reviews" : 0,
+        "phil" : "I love Ashmita",
+        "T" : {
+                "aff_wr" : 0.0,
+                "we_meet_p" : 0.0,
+                "aff_flex_outweighs" : 0.0,
+                "reasonability_p" : 0.0,
+                "condo_p" : 0.0
+            },
+        "K" : {
+                "aff_wr" : 0.0,
+                "framework_wr" : 0.0,
+                "perm_wr" : 0.0,
+                "impact_turn_wr" : 0.0,
+                "no_alt_solvency_wr" : 0.0,
+                "case_outweights_wr" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "DA" : {
+                "aff_wr" : 0.0,
+                "case_outweights_wr" : 0.0,
+                "no_link_wr" : 0.0,
+                "link_turn_wr" : 0.0,
+                "no_impact_wr" : 0.0,
+                "impact_turn_wr" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "CP" : {
+                "aff_wr" : 0.0,
+                "perm_wr" : 0.0,
+                "cp_theory_wr" : 0.0,
+                "solvency_deficit" : 0.0,
+                "offense_on_net_benefit" : 0.0,
+                "links_to_net_benefit" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "impact_turn" : {
+                "aff_wr" : 0.0
+        }
+        }
+        return cls.create_new_judge(data)
+    @classmethod
     def create_new_judge(cls, data):
         """Create a new judge in firebase from DATA dictionary, returns a new judge object"""
         if cls.is_data_valid(data):
