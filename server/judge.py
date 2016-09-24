@@ -8,6 +8,7 @@ class fb_object(object):
         """Takes in a str GUID and a string TYPE and fetches all the data from fb"""
         self.guid = guid
         self.data = db.child(type).child(self.guid).get().val()
+        self.orig_data = self.data.copy()
         self.does_exist = True
         if not self.exists():
             self.does_exist = False
@@ -24,11 +25,18 @@ class judge(fb_object):
         super().__init__(judge_id, 'judges')
         if not self.does_exist:
             return None
+        #TODO potentonally just use self.data
         self.first_name = self.data['first_name']
         self.last_name = self.data['last_name']
         self.spreading = float(self.data['spreading'])
         self.phil = self.data['phil']
+        self.num_reviews = self.data['num_reviews']
         # TODO more metrics
+    def get_value(self, field):
+        return self.data[field]
+    def update_field(self, field, new_value):
+        self.data[field] = new_value
+        db.child('judges').child(self.guid).update({field :  new_value })
     @classmethod
     def create_new_judge(cls, data):
         """Create a new judge in firebase from DATA dictionary, returns a new judge object"""
@@ -90,7 +98,6 @@ class upload(fb_object):
         self.judge_first_name = self.data['judge_first_name']
         self.judge_last_name = self.data['judge_last_name']
         self.speed_pref = self.data['speed_pref']
-        # Have indiviudal fields for all judge info or one dict?
     def upload_exists(self):
         if self.data:
             return True
