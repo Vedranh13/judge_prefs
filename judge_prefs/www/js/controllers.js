@@ -34,6 +34,7 @@ angular.module('starter.controllers', [])
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
+      alert(judgetwo.rfd);
     }
     else {
       alert("Please input the reason for decision.");
