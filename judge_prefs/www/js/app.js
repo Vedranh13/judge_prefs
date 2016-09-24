@@ -121,8 +121,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $scope.authObj = $firebaseAuth(ref);
  }
 ]).factory("Items", function($firebaseArray) {
-  var itemsRef = new Firebase("https://judge-prefs.firebaseio.com/");
-  return $firebaseArray(itemsRef);
+  var ref = new Firebase("https://judge-prefs.firebaseio.com/judges");
+  return $firebaseArray(ref);
 })
 ;
 //.initializeApp({
