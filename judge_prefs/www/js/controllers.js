@@ -33,7 +33,7 @@ angular.module('starter.controllers', [])
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
     $rootScope.judge.rfd = "-1";
-    alert("Round report submitted.")
+    alert("Round report submitted.");
     $state.go('tab.dash');
   };
 })
@@ -45,7 +45,7 @@ angular.module('starter.controllers', [])
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
-      alert("Round report submitted.")
+      alert("Round report submitted.");
       $state.go('tab-dash');
     }
     else {
