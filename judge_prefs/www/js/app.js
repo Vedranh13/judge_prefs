@@ -31,6 +31,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+  .state('rr-t', {
+    url: '/rr-t',
+    views: {
+      'rr-t': {
+        templateUrl: 'templates/tab-rr.html',
+        controller: 'rrCtrl'
+      }
+    }
+  })
+
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
@@ -56,16 +66,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'tab-rr': {
         templateUrl: 'templates/tab-rr.html',
         controller: 'rrCtrl'
-      }
-    }
-  })
-
-  .state('tab.rr-t', {
-    url: '/rr-t',
-    views: {
-      'tab-rr-t': {
-        templateUrl: 'templates/tab-rr-t.html',
-        controller: 'rr-tCtrl'
       }
     }
   })
