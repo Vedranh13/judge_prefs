@@ -29,28 +29,33 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('rrCtrl', function($scope) {
-  $scope.rrNext = function() {
+.controller('rrCtrl', function($scope, $state) {
 
-    // trad_aff = 1, k_aff = 2, no aff = 0
-    $scope.aff_type = 0;
+  $scope.judge = {};
 
-    if (judge.trad_aff) {
-      $scope.aff_type = 1;
+  $scope.rrNext = function(judge) {
+
+    if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
+      switch (judge.neg_choice) {
+        case "t":
+          $state.go('tab-rr-t');
+          break;
+        case "k":
+          $state.go('tab-rr-k');
+          break;
+        case "cp":
+          $state.go('tab-rr-cp');
+          break;
+        case "da":
+          $state.go('tab-rr-da');
+          break;
+        case "it":
+          $state.go('tab-rr-it');
+          break;
+      }
     }
-    else if (judge.k_aff) {
-      $scope.aff_type = 2;
-    }
-
-    // T = 1, K = 2, CP = 3, DA = 4, Impact Turns = 5, none = 0
-    $scope.neg_choice = 0;
-
-    if (judge.t) {
-      $scope.neg_choice = 1;
-    }
-
-    if (judge.firstName && judge.lastName && judge.speedPref) {
-
+    else {
+      alert("Please fill out all fields.");
     }
   };
 });
