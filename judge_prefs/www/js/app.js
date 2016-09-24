@@ -31,14 +31,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
 
   .state('rr-t', {
-    url: '/rr-t',
-    views: {
-      'rr-t': {
-        templateUrl: 'templates/tab-rr.html',
-        controller: 'rrCtrl'
-      }
-    }
-  })
+        url: "/rr-t",
+        templateUrl: "templates/rr-t.html",
+        controller: "rr-tCtrl"
+      })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
@@ -114,15 +110,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $urlRouterProvider.otherwise('/tab/dash');
 
 })
-//adding the Authentication object which should allow us to authenticate users 
+//adding the Authentication object which should allow us to authenticate users
 .controller("MyAuthCtrl", ["$scope","$firebaseAuth",
  function($scope,$firebaseAuth){
   var ref = new Firebase("https://judge-prefs.firebaseio.com");
   $scope.authObj = $firebaseAuth(ref);
  }
 ]).factory("Items", function($firebaseArray) {
-  var itemsRef = new Firebase("https://judge-prefs.firebaseio.com/");
-  return $firebaseArray(itemsRef);
+  var ref = new Firebase("https://judge-prefs.firebaseio.com/judges");
+  return $firebaseArray(ref);
 })
 ;
 //.initializeApp({
