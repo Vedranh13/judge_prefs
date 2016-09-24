@@ -5,7 +5,6 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
 
 .run(function($ionicPlatform) {
@@ -41,14 +40,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
 
   .state('rr-t', {
-    url: '/rr-t',
-    views: {
-      'rr-t': {
-        templateUrl: 'templates/tab-rr.html',
-        controller: 'rrCtrl'
-      }
-    }
-  })
+      url: "/rr-t",
+      templateUrl: "templates/rr-t.html",
+      controller: "rr-tCtrl"
+    })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
