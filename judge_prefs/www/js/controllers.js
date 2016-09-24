@@ -27,6 +27,8 @@ angular.module('starter.controllers', [])
   };
 })
 
+
+
 .controller('rrCtrl', function($scope, $state) {
 
   $scope.judge = {};
