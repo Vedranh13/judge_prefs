@@ -27,4 +27,35 @@ angular.module('starter.controllers', [])
   $scope.settings = {
     enableFriends: true
   };
+})
+
+.controller('rrCtrl', function($scope, $state) {
+
+  $scope.judge = {};
+
+  $scope.rrNext = function(judge) {
+
+    if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
+      switch (judge.neg_choice) {
+        case "t":
+          $state.go('tab-rr-t');
+          break;
+        case "k":
+          $state.go('tab-rr-k');
+          break;
+        case "cp":
+          $state.go('tab-rr-cp');
+          break;
+        case "da":
+          $state.go('tab-rr-da');
+          break;
+        case "it":
+          $state.go('tab-rr-it');
+          break;
+      }
+    }
+    else {
+      alert("Please fill out all fields.");
+    }
+  };
 });
