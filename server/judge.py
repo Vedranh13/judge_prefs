@@ -32,6 +32,8 @@ class judge(fb_object):
         self.phil = self.data['phil']
         self.num_reviews = self.data['num_reviews']
         # TODO more metrics
+    def calc_new_spreading(self, new_spreading):
+        self.update_field('spreading', (new_spreading + self.get_value('spreading') * self.get_value('num_reviews')) / (self.get_value('num_reviews') + 1))
     def get_value(self, field):
         return self.data[field]
     def update_field(self, field, new_value):
