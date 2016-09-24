@@ -5,11 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-//var firebase = require('firebase')
-//    firebase.initializeApp({
-//        serviceAccount:"judge_prefs/judge_prefs/judge-prefs-56455ec1c8cc.json"
-//        databaseURL: "https://judge-prefs.firebaseio.com" 
-//        });
+
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
 
 .run(function($ionicPlatform) {
