@@ -27,4 +27,30 @@ angular.module('starter.controllers', [])
   $scope.settings = {
     enableFriends: true
   };
+})
+
+.controller('rrCtrl', function($scope) {
+  $scope.rrNext = function() {
+
+    // trad_aff = 1, k_aff = 2, no aff = 0
+    $scope.aff_type = 0;
+
+    if (judge.trad_aff) {
+      $scope.aff_type = 1;
+    }
+    else if (judge.k_aff) {
+      $scope.aff_type = 2;
+    }
+
+    // T = 1, K = 2, CP = 3, DA = 4, Impact Turns = 5, none = 0
+    $scope.neg_choice = 0;
+
+    if (judge.t) {
+      $scope.neg_choice = 1;
+    }
+
+    if (judge.firstName && judge.lastName && judge.speedPref) {
+
+    }
+  };
 });
