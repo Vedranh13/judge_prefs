@@ -47,4 +47,26 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+
+.factory('outputter', function() {
+  output = {};
+
+  return {
+    getOutput: function () {
+      return output;
+    },
+    setOutput: function(input) {
+      output.firstName = input.firstName;
+      output.lastName = input.lastName;
+      output.speedPref = input.speedPref;
+      output.aff_type = input.aff_type;
+      output.neg_choice = input.neg_choice;
+      output.winner = input.winner;
+    },
+    setOutput2: function (input) {
+      output.rfd = input.rfd;
+      output.comments = input.comments;
+    }
+};
 });
