@@ -1,0 +1,14 @@
+<ion-view view-title="Comments">
+    <ion-content ng-controller="rr-itCtrl" class="padding">
+      <ion-list>
+        <ion-item class="bar bar-header bar-royal">
+          <h1 class="title">Comments (optional):</h1>
+        </ion-item>
+        <ion-item>
+          <textarea ng-model="judgethree.comments" rows="6" placeholder="Insert Comment"></textarea>
+        </ion-item>
+      <button ng-click="rrSubmitOp(judgethree)" class="button button-block button-positive">
+        Submit
+      </button>
+  </ion-content>
+</ion-view>

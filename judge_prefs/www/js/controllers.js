@@ -27,6 +27,15 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('rr-itCtrl', function($scope, $rootScope) {
+  $scope.judgethree = {};
+
+  $scope.rrSubmitOp = function(judgethree) {
+    $rootScope.judge.comments = judgethree.comments;
+    $rootScope.judge.rfd = "-1";
+  };
+})
+
 .controller('rr-tCtrl', function($scope, $rootScope) {
   $scope.judgetwo = {};
 
@@ -49,9 +58,28 @@ angular.module('starter.controllers', [])
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
       $rootScope.judge = judge;
-      switch (judge.neg_choice) {
-        case "t":
-          $state.go('rr-t');
+      switch (judge.winner) {
+        case "neg_win":
+          $state.go('rr-it');
+          break;
+        case "aff_win":
+          switch (judge.neg_choice) {
+            case "t":
+              $state.go('rr-t');
+              break;
+            case "k":
+              $state.go('rr-k');
+              break;
+            case "cp":
+              $state.go('rr-cp');
+              break;
+            case "da":
+              $state.go('rr-da');
+              break;
+            case "it":
+              $state.go('rr-it');
+              break;
+          }
           break;
       }
     }

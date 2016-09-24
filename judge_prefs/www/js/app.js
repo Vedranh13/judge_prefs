@@ -36,6 +36,31 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: "rr-tCtrl"
       })
 
+  .state('rr-k', {
+        url: "/rr-k",
+        templateUrl: "templates/rr-k.html",
+        controller: "rr-tCtrl"
+      })
+
+  .state('rr-cp', {
+        url: "/rr-cp",
+        templateUrl: "templates/rr-cp.html",
+        controller: "rr-tCtrl"
+      })
+
+  .state('rr-da', {
+        url: "/rr-da",
+        templateUrl: "templates/rr-da.html",
+        controller: "rr-tCtrl"
+      })
+
+  .state('rr-it', {
+        url: "/rr-it",
+        templateUrl: "templates/rr-it.html",
+        controller: "rr-itCtrl"
+      })
+
+
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
