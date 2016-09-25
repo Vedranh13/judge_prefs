@@ -153,6 +153,48 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }}
             self.update_field('CP', dirc)
+        if choice.upper() == "K":
+            num = self.get_value("K")["K_num"] + 1
+            if up.get_value('winner') == 'aff_wins':
+                wr = calc_p(self.get_value('K')['aff_wr'], num, won = True)
+            else:
+                wr = calc_p(self.get_value('K')['aff_wr'], num)
+            if up.get_value('rfd') == "framework":
+                frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
+            else:
+                frame = calc_p(self.get_value('K')['framework_wr'], num)
+            if up.get_value('rfd') == 'perm':
+                perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
+            else:
+                perm = calc_p(self.get_value('K')['perm_wr'], num)
+            if up.get_value('rfd') == 'impact_turn':
+                it = calc_p(self.get_value('K')['impact_turn_wr'], num, won = True)
+            else:
+                it = calc_p(self.get_value('K')['impact_turn_wr'], num)
+            if up.get_value('rfd') == 'no_alt':
+                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num, won = True)
+            else:
+                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num)
+            if up.get_value('rfd') == 'case_outweights':
+                links = calc_p(self.get_value('K')['case_outweights_wr'], num, won = True)
+            else:
+                links = calc_p(self.get_value('K')['case_outweights_wr'], num)
+            if up.get_value('rfd') == 'condo':
+                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+            else:
+                condo = calc_p(self.get_value('CP')['condo'], num)
+            dirc = { "K" : {
+                    "K_num" : num,
+                    "aff_wr" : wr,
+                    "framework_wr" : frame,
+                    "perm_wr" : perm,
+                    "impact_turn_wr" : it,
+                    "no_alt_solvency_wr" : sol,
+                    "case_outweights_wr" : links,
+                    "condo_wr" : condo
+                    }}
+            self.update_field('K', dirc)
+
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
