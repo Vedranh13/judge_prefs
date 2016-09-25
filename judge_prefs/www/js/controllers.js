@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
@@ -27,24 +27,30 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('rr-itCtrl', function($scope, $rootScope, $state) {
+.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
     $rootScope.judge.rfd = "-1";
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
     alert("Round report submitted.");
     $state.go('tab.dash');
   };
 })
 
-.controller('rr-tCtrl', function($scope, $rootScope, $state) {
+.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray) {
   $scope.judgetwo = {};
 
   $scope.rrSubmit = function(judgetwo) {
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
       alert("Round report submitted.");
       $state.go('tab.dash');
     }
