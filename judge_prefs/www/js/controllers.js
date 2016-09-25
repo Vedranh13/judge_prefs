@@ -3,12 +3,11 @@ angular.module('starter.controllers', ['firebase','ionic'])
 .controller('DashCtrl', function($scope) {})
 
 .controller('sj-resultsCtrl', function($scope,$rootScope,$firebaseArray) {
-   
+
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("judges"));
       array.$loaded().then(function(array) {
-        $scope.jinfo = array[$rootScope.jid]; //need a judge name 
-        });
+        $scope.jinfo = array[$rootScope.jid]; //need a judge name
       });
 })
 
