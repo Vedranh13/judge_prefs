@@ -71,9 +71,7 @@ class tabroom(site):
         """This method creates an entry in firebase for every judge in tabroom"""
         #CHANGE TO 283 AGAIN!!!!
         for i in range(283, 57630):
-            if _thread._count() > 5:
-                 time.sleep(60)
-            _thread.start_new_thread(tabroom.create_one_judge, (i,))
+            tabroom.create_one_judge(i)
 class judge_phil(site):
     def __init__(self):
         super().__init__("judgephilosophies.wikispaces.com/")

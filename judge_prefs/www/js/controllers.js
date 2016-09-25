@@ -2,7 +2,14 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('sj-resultsCtrl', function($scope) {
+.controller('sj-resultsCtrl', function($scope,$rootScope,$firebaseArray) {
+   
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("judges"));
+      array.$loaded().then(function(array) {
+        $scope.jinfo = array[$rootScope.jid]; //need a judge name 
+        });
+      });
 })
 
 .controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
@@ -17,9 +24,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
       $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
-      //var outer = $firebaseArray(ref);
-      //console.log("length of outer");
-      //console.log(outer.length);
       var array = $firebaseArray(ref.child("user_uploads"));
       array.$loaded().then(function(array) {
       $rootScope.judge.upload_number = array.length+1;
