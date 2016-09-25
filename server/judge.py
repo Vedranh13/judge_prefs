@@ -114,10 +114,47 @@ class judge(fb_object):
             self.update_field('impact_turn', dictk)
         if choice.upper() == "CP":
             num = self.get_value("CP")["CP_num"] + 1
-            if self.get_value('winner') == 'aff_wins':
-                dirc = { "CP" : {
+            if up.get_value('winner') == 'aff_wins':
+                wr = calc_p(self.get_value('CP')['aff_wr'], num, won = True)
+            else:
+                wr = calc_p(self.get_value('CP')['aff_wr'], num)
+            if up.get_value('rfd') == "perm":
+                perm = calc_p(self.get_value('CP')['perm_wr'], num, won = True)
+            else:
+                perm = calc_p(self.get_value('CP')['perm_wr'], num)
+            if up.get_value('rfd') == 'theory':
+                thr = calc_p(self.get_value('CP')['cp_theory_wr'], num, won = True)
+            else:
+                thr = calc_p(self.get_value('CP')['cp_theory_wr'], num)
+            if up.get_value('rfd') == 'solvency_def':
+                sol = calc_p(self.get_value('CP')['solvency_deficit'], num, won = True)
+            else:
+                sol = calc_p(self.get_value('CP')['solvency_deficit'], num)
+            if up.get_value('rfd') == 'net_ben_offense':
+                off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num, won = True)
+            else:
+                off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num)
+            if up.get_value('rfd') == 'net_ben_links':
+                links = calc_p(self.get_value('CP')['links_to_net_benefit'], num, won = True)
+            else:
+                links = calc_p(self.get_value('CP')['links_to_net_benefit'], num)
+            if up.get_value('rfd') == 'condo':
+                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+            else:
+                condo = calc_p(self.get_value('CP')['condo'], num)
+            dirc = { "CP" : {
                     "CP_num" : num,
+                    "aff_wr" : wr,
+                    "perm_wr" : perm,
+                    "cp_theory_wr" : thr,
+                    "solvency_deficit" : sol,
+                    "offense_on_net_benefit" : off,
+                    "links_to_net_benefit" : links,
+                    "condo_wr" : condo
                     }}
+            self.update_field('CP', dirc)
+
+
 
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
