@@ -153,9 +153,6 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }}
             self.update_field('CP', dirc)
-
-
-
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
@@ -268,5 +265,4 @@ class upload(fb_object):
                 num = jud.get_value("k_aff_num")
                 print(num)
                 jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
-        if self.get_value('neg_choice') == "cp":
-            jud.process_neg("CP", self.get_value('rfd'))
+            jud.process_neg(self)
