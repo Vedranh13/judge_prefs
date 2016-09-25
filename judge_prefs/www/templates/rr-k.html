@@ -1,0 +1,27 @@
+<ion-view view-title="Kritik Round Report">
+    <ion-content ng-controller="rr-tCtrl" class="padding">
+      <ion-list radio-group>
+        <ion-item class="bar bar-header bar-royal">
+          <h1 class="title">Voted Aff On:</h1>
+        </ion-item>
+        <ion-item>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="framework">Framework</ion-radio>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="perm">Perm</ion-radio>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="impact_turn">Impact Turn</ion-radio>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="no_alt">No Alt Solvency</ion-radio>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="case_outweighs">Case Outweighs</ion-radio>
+          <ion-radio ng-model="judgetwo.rfd" name="t_rfd" value="condo">Conditionality</ion-radio>
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <ion-item class="bar bar-header bar-royal">
+          <h1 class="title">Comments (optional):</h1>
+        </ion-item>
+        <ion-item>
+          <textarea ng-model="judgetwo.comments" rows="6" placeholder="Insert Comment"></textarea>
+        </ion-item>
+      <button ng-click="rrSubmit(judgetwo)" class="button button-block button-positive">
+        Submit
+      </button>
+  </ion-content>
+</ion-view>
