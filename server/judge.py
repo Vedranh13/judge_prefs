@@ -99,14 +99,25 @@ class judge(fb_object):
         }
         }
         return cls.create_new_judge(data)
-    def process_neg(self, choice, rfd):
+    def process_neg(self, up):
+        choice = up.get_value('neg_choice')
+        if choice.upper() == "IT":
+            num = self.get_value("impact_turn")["it_num"] + 1
+            if up.get_value('winner') == 'aff_win':
+                wr = calc_p(self.get_value('impact_turn')['aff_wr'], num, won = True)
+            else:
+                wr = calc_p(self.get_value('impact_turn')['aff_wr'], num)
+            dictk = {
+                "it_num" : num,
+                "aff_wr" : wr
+            }
+            self.update_field('impact_turn', dictk)
         if choice.upper() == "CP":
-            num = self.get_value(["CP"]["CP_num"]) + 1
-            if rfd == -1:
-                pass
-            dirc = { "CP" : {
+            num = self.get_value("CP")["CP_num"] + 1
+            if self.get_value('winner') == 'aff_wins':
+                dirc = { "CP" : {
                     "CP_num" : num,
-            }}
+                    }}
 
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
@@ -221,4 +232,4 @@ class upload(fb_object):
                 print(num)
                 jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
         if self.get_value('neg_choice') == "cp":
-            pass
+            jud.process_neg("CP", self.get_value('rfd'))
