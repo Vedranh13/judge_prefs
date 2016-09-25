@@ -99,9 +99,16 @@ class judge(fb_object):
         }
         }
         return cls.create_new_judge(data)
+    def calc_wr(self, up, target, cat, update, search_term = 'rfd'):
+        """returns the win_rate
+        """
+        if up.get_value(search_term) == target:
+            return calc_p(self.get_value(cat)[update])
+
     def process_neg(self, up):
         choice = up.get_value('neg_choice')
         if choice.upper() == "IT":
+            print('hey from it')
             num = self.get_value("impact_turn")["it_num"] + 1
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('impact_turn')['aff_wr'], num, won = True)
@@ -139,10 +146,10 @@ class judge(fb_object):
             else:
                 links = calc_p(self.get_value('CP')['links_to_net_benefit'], num)
             if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+                condo = calc_p(self.get_value('CP')['condo_wr'], num, won = True)
             else:
-                condo = calc_p(self.get_value('CP')['condo'], num)
-            dirc = { "CP" : {
+                condo = calc_p(self.get_value('CP')['condo_wr'], num)
+            dirc = {
                     "CP_num" : num,
                     "aff_wr" : wr,
                     "perm_wr" : perm,
@@ -151,7 +158,7 @@ class judge(fb_object):
                     "offense_on_net_benefit" : off,
                     "links_to_net_benefit" : links,
                     "condo_wr" : condo
-                    }}
+                    }
             self.update_field('CP', dirc)
         if choice.upper() == "K":
             num = self.get_value("K")["K_num"] + 1
@@ -180,10 +187,10 @@ class judge(fb_object):
             else:
                 links = calc_p(self.get_value('K')['case_outweights_wr'], num)
             if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+                condo = calc_p(self.get_value('K')['condo_wr'], num, won = True)
             else:
-                condo = calc_p(self.get_value('CP')['condo'], num)
-            dirc = { "K" : {
+                condo = calc_p(self.get_value('K')['condo_wr'], num)
+            dirc = {
                     "K_num" : num,
                     "aff_wr" : wr,
                     "framework_wr" : frame,
@@ -192,9 +199,49 @@ class judge(fb_object):
                     "no_alt_solvency_wr" : sol,
                     "case_outweights_wr" : links,
                     "condo_wr" : condo
-                    }}
+                    }
             self.update_field('K', dirc)
-
+        if choice.upper() == "DA":
+            num = self.get_value("DA")["DA_num"] + 1
+            if up.get_value('winner') == 'aff_wins':
+                wr = calc_p(self.get_value('DA')['aff_wr'], num, won = True)
+            else:
+                wr = calc_p(self.get_value('DA')['aff_wr'], num)
+            if up.get_value('rfd') == "framework":
+                frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
+            else:
+                frame = calc_p(self.get_value('K')['framework_wr'], num)
+            if up.get_value('rfd') == 'perm':
+                perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
+            else:
+                perm = calc_p(self.get_value('K')['perm_wr'], num)
+            if up.get_value('rfd') == 'impact_turn':
+                it = calc_p(self.get_value('K')['impact_turn_wr'], num, won = True)
+            else:
+                it = calc_p(self.get_value('K')['impact_turn_wr'], num)
+            if up.get_value('rfd') == 'no_alt':
+                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num, won = True)
+            else:
+                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num)
+            if up.get_value('rfd') == 'case_outweights':
+                links = calc_p(self.get_value('K')['case_outweights_wr'], num, won = True)
+            else:
+                links = calc_p(self.get_value('K')['case_outweights_wr'], num)
+            if up.get_value('rfd') == 'condo':
+                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+            else:
+                condo = calc_p(self.get_value('CP')['condo'], num)
+            dirc = {
+                    "K_num" : num,
+                    "aff_wr" : wr,
+                    "framework_wr" : frame,
+                    "perm_wr" : perm,
+                    "impact_turn_wr" : it,
+                    "no_alt_solvency_wr" : sol,
+                    "case_outweights_wr" : links,
+                    "condo_wr" : condo
+                    }
+            self.update_field('K', dirc)
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
@@ -307,4 +354,4 @@ class upload(fb_object):
                 num = jud.get_value("k_aff_num")
                 print(num)
                 jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
-            jud.process_neg(self)
+        jud.process_neg(self)
