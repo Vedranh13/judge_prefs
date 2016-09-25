@@ -2,21 +2,27 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray) {
+.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray,$firebaseObject) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
     $rootScope.judge.rfd = "-1";
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      //var outer = $firebaseArray(ref);
+      //console.log("length of outer");
+      //console.log(outer.length);
       var array = $firebaseArray(ref.child("user_uploads"));
+      array.$loaded().then(function(array) {
+      $rootScope.judge.upload_number = array.length+1;
       array.$add($rootScope.judge);
-    alert("Round report submitted.");
-    $state.go('tab.dash');
+      alert("Round report submitted.");
+      $state.go('tab.dash');
+      });
   };
 })
 
-.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray) {
+.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray,$firebaseObject) {
   $scope.judgetwo = {};
 
   $scope.rrSubmit = function(judgetwo) {
@@ -25,9 +31,12 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $rootScope.judge.comments = judgetwo.comments;
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("user_uploads"));
+      array.$loaded().then(function(array) {
+      $rootScope.judge.upload_number = array.length+1;
       array.$add($rootScope.judge);
       alert("Round report submitted.");
       $state.go('tab.dash');
+      });
     }
     else {
       alert("Please input the reason for decision.");
