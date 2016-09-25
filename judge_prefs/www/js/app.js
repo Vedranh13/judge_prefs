@@ -38,6 +38,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+  .state('sj-results', {
+        url: "/sj-results",
+        templateUrl: "templates/sj-results.html",
+        controller: "sj-resultsCtrl"
+      })
 
   .state('rr-t', {
         url: "/rr-t",
