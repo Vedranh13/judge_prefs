@@ -1,31 +1,23 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
+  $scope.judgethree = {};
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  $scope.rrSubmitOp = function(judgethree) {
+    $rootScope.judge.comments = judgethree.comments;
+    $rootScope.judge.rfd = "-1";
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
+      var alertPopup = $ionicPopup.alert({
+        title: "Round Report submitted."
+      });
+    $state.go('tab.dash');
   };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-})
 
 
 .controller('searchCtrl', function($scope, $firebaseArray)  {
@@ -33,8 +25,6 @@ angular.module('starter.controllers', [])
  var judges = $firebaseArray(ref)
  $scope.finder = {}
  $scope.searchNext = function() {
-   console.log($scope)
-  //  console.log($scope)
    var judgeFound = 0
    for(var i = 0; i < judges.length; i++) {
     if ($scope.finder.f == judges[i].first_name && $scope.finder.l == judges[i].last_name) {
@@ -47,25 +37,67 @@ angular.module('starter.controllers', [])
    }
 }})
 
-.controller('rr-tCtrl', function($scope, $state) {})
 
+.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray, $ionicPopup) {
+  $scope.judgetwo = {};
 
-.controller('rrCtrl', function($scope, $state) {
+  $scope.rrSubmit = function(judgetwo) {
+    if (judgetwo.rfd) {
+      $rootScope.judge.rfd = judgetwo.rfd;
+      $rootScope.judge.comments = judgetwo.comments;
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
+      var alertPopup = $ionicPopup.alert({
+        title: "Round Report submitted."
+      });
+      $state.go('tab.dash');
+    }
+    else {
+      var alertPopuptwo = $ionicPopup.alert({
+        title: "Please enter the reason for decision."
+      });
+    }
+  };
+})
+
+.controller('rrCtrl', function($scope, $state, $rootScope, $ionicPopup) {
 
   $scope.judge = {};
 
   $scope.rrNext = function(judge) {
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
-      outputter.setOutput(judge);
-      switch (judge.neg_choice) {
-        case "t":
-          $state.go('rr-t');
+      $rootScope.judge = judge;
+      switch (judge.winner) {
+        case "neg_win":
+          $state.go('rr-it');
+          break;
+        case "aff_win":
+          switch (judge.neg_choice) {
+            case "t":
+              $state.go('rr-t');
+              break;
+            case "k":
+              $state.go('rr-k');
+              break;
+            case "cp":
+              $state.go('rr-cp');
+              break;
+            case "da":
+              $state.go('rr-da');
+              break;
+            case "it":
+              $state.go('rr-it');
+              break;
+          }
           break;
       }
     }
     else {
-      alert("Please fill out all fields.");
+      var alertPopup = $ionicPopup.alert({
+        title: "Please enter all fields."
+      });
     }
   };
 });

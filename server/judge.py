@@ -32,11 +32,62 @@ class judge(fb_object):
         self.phil = self.data['phil']
         self.num_reviews = self.data['num_reviews']
         # TODO more metrics
+    def calc_new_spreading(self, new_spreading):
+        """Takes in a list of new_spreading values and calulates a new average for them"""
+        self.update_field('spreading', (sum(new_spreading) + self.get_value('spreading') * self.get_value('num_reviews')) / (self.get_value('num_reviews') + len(new_spreading)))
     def get_value(self, field):
         return self.data[field]
     def update_field(self, field, new_value):
         self.data[field] = new_value
         db.child('judges').child(self.guid).update({field :  new_value })
+    @classmethod
+    def create_blank_judge(cls, first_name, last_name):
+        """Creates a blank judge given a name"""
+        data = {
+        "first_name" : first_name,
+        "last_name" : last_name,
+        "spreading" : 0.0,
+        "num_reviews" : 0,
+        "phil" : "I love Ashmita",
+        "T" : {
+                "aff_wr" : 0.0,
+                "we_meet_p" : 0.0,
+                "aff_flex_outweighs" : 0.0,
+                "reasonability_p" : 0.0,
+                "condo_p" : 0.0
+            },
+        "K" : {
+                "aff_wr" : 0.0,
+                "framework_wr" : 0.0,
+                "perm_wr" : 0.0,
+                "impact_turn_wr" : 0.0,
+                "no_alt_solvency_wr" : 0.0,
+                "case_outweights_wr" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "DA" : {
+                "aff_wr" : 0.0,
+                "case_outweights_wr" : 0.0,
+                "no_link_wr" : 0.0,
+                "link_turn_wr" : 0.0,
+                "no_impact_wr" : 0.0,
+                "impact_turn_wr" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "CP" : {
+                "aff_wr" : 0.0,
+                "perm_wr" : 0.0,
+                "cp_theory_wr" : 0.0,
+                "solvency_deficit" : 0.0,
+                "offense_on_net_benefit" : 0.0,
+                "links_to_net_benefit" : 0.0,
+                "condo_wr" : 0.0
+        },
+        "impact_turn" : {
+                "aff_wr" : 0.0
+        }
+        }
+        return cls.create_new_judge(data)
     @classmethod
     def create_new_judge(cls, data):
         """Create a new judge in firebase from DATA dictionary, returns a new judge object"""
