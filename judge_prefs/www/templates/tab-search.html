@@ -1,18 +1,17 @@
 <ion-view view-title="Search for a Judge">
-  <ion-list>
-    <ion-item class="bar bar-header bar-royal">
-      <h1 class="title">Judge Name:</h1>
-    </ion-item>
-    <ion-item>
-      <input type="text" <ion-searchbar [(ng-model)]="defaultSearch" placeholder="First Name"></ion-searchbar>
-    </ion-item>
-    <ion-item>
-      <input type="text" <ion-searchbar [(ng-model)]="defaultSearch" placeholder="Last Name"></ion-searchbar>
-    </ion-item>
-    <button class="button button-block button-positive">Submit</button>
+    <ion-list>
+      <ion-item class="bar bar-header bar-royal">
+        <h1 class="title">Judge Search:</h1>
+      </ion-item>
+      <ion-item>
+        <input type="text" ng-model="finder.f" placeholder="First Name">
+      </ion-item>
+      <ion-item>
+        <input type="text" ng-model="finder.l" placeholder="Last Name">
+      </ion-item>
 
-  </ion-list>
-
-
-
+      <button ng-click="searchNext()" class="button button-block button-positive">
+        Search
+      </button>
+    </ion-list>
 </ion-view>
