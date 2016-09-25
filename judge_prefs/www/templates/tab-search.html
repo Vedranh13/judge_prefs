@@ -4,15 +4,14 @@
       <h1 class="title">Judge Name:</h1>
     </ion-item>
     <ion-item>
-      <input type="text" <ion-searchbar [(ng-model)]="defaultSearch" placeholder="First Name"></ion-searchbar>
+      <input type="text" ng-model="finder.f" placeholder="First Name">
     </ion-item>
     <ion-item>
-      <input type="text" <ion-searchbar [(ng-model)]="defaultSearch" placeholder="Last Name"></ion-searchbar>
+      <input type="text" ng-model="finder.l" placeholder="Last Name">
     </ion-item>
-    <button class="button button-block button-positive">Submit</button>
-
+    <button ng-click="searchNext()" class="button button-block button-positive">
+      Search
+    </button>
   </ion-list>
-
-
 
 </ion-view>
