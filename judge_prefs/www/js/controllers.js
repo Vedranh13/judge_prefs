@@ -29,6 +29,8 @@ angular.module('starter.controllers', ['firebase','ionic'])
        $rootScope.judge.comments = "-1";
       }
       $rootScope.judge.rfd = "-1";
+      $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
+      $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       //var outer = $firebaseArray(ref);
       //console.log("length of outer");
@@ -75,6 +77,8 @@ angular.module('starter.controllers', ['firebase','ionic'])
       if(typeof $rootScope.judge.comments == 'undefined'){
         $rootScope.judge.comments = "-1";
       }
+      $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
+      $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("user_uploads"));
       array.$loaded().then(function(array) {
