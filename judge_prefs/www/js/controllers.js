@@ -2,24 +2,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('searchCtrl', function($scope, $firebaseArray) {
-  var ref = new Firebase("http://judge-prefs.firebaseio.com/judges");
-  var judges = $firebaseArray(ref);
-  $scope.finder = {};
-  $scope.searchNext = function() {
-    var judgeFound = 0;
-    for (var i = 0; i < judges.length; i++) {
-      if ($scope.finder.f == judges[i].first_name && $scope.finder.l == judges[i].last_name) {
-        console.log(judges[i]);
-        judgeFound = 1;
-      }
-      if (judgeFound === 0 ){
-        alert("Judge not found.");
-      }
-    }
-  };
-})
-
 .controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
   $scope.judgethree = {};
 
@@ -47,9 +29,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
   };
 })
 
-
-
-.controller('searchCtrl', function($scope, $firebaseArray)  {
+.controller('searchCtrl', function($scope, $firebaseArray, $ionicPopup)  {
  var ref = new Firebase("http://judge-prefs.firebaseio.com/judges")
  var judges = $firebaseArray(ref)
  $scope.finder = {}
@@ -62,7 +42,9 @@ angular.module('starter.controllers', ['firebase','ionic'])
      }
    }
     if(judgeFound==0){
-      alert("Judge not found.")
+      var alertPopupThree = $ionicPopup.alert({
+        title: "Judge Not Found."
+        });
    }
 }})
 
