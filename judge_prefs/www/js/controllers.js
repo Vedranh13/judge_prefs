@@ -2,7 +2,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray) {
+.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
@@ -11,12 +11,14 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("user_uploads"));
       array.$add($rootScope.judge);
-    alert("Round report submitted.");
+      var alertPopup = $ionicPopup.alert({
+        title: "Round Report submitted."
+      });
     $state.go('tab.dash');
   };
 })
 
-.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray) {
+.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray, $ionicPopup) {
   $scope.judgetwo = {};
 
   $scope.rrSubmit = function(judgetwo) {
@@ -26,16 +28,20 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("user_uploads"));
       array.$add($rootScope.judge);
-      alert("Round report submitted.");
+      var alertPopup = $ionicPopup.alert({
+        title: "Round Report submitted."
+      });
       $state.go('tab.dash');
     }
     else {
-      alert("Please input the reason for decision.");
+      var alertPopuptwo = $ionicPopup.alert({
+        title: "Please enter the reason for decision."
+      });
     }
   };
 })
 
-.controller('rrCtrl', function($scope, $state, $rootScope) {
+.controller('rrCtrl', function($scope, $state, $rootScope, $ionicPopup) {
 
   $scope.judge = {};
 
@@ -69,7 +75,9 @@ angular.module('starter.controllers', ['firebase','ionic'])
       }
     }
     else {
-      alert("Please fill out all fields.");
+      var alertPopup = $ionicPopup.alert({
+        title: "Please enter all fields."
+      });
     }
   };
 });
