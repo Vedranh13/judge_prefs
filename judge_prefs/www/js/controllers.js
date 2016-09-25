@@ -2,17 +2,44 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
+.controller('searchCtrl', function($scope, $firebaseArray) {
+  var ref = new Firebase("http://judge-prefs.firebaseio.com/judges");
+  var judges = $firebaseArray(ref);
+  $scope.finder = {};
+  $scope.searchNext = function() {
+    var judgeFound = 0;
+    for (var i = 0; i < judges.length; i++) {
+      if ($scope.finder.f == judges[i].first_name && $scope.finder.l == judges[i].last_name) {
+        console.log(judges[i]);
+        judgeFound = 1;
+      }
+      if (judgeFound === 0 ){
+        alert("Judge not found.");
+      }
+    }
+  };
+})
+
 .controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
-    $rootScope.judge.rfd = "-1";
+    if(typeof $rootScope.judge.comments == 'undefined'){
+       $rootScope.judge.comments = "-1";
+      }
+      $rootScope.judge.rfd = "-1";
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      //var outer = $firebaseArray(ref);
+      //console.log("length of outer");
+      //console.log(outer.length);
       var array = $firebaseArray(ref.child("user_uploads"));
+      array.$loaded().then(function(array) {
+      $rootScope.judge.upload_number = array.length+1;
       array.$add($rootScope.judge);
       var alertPopup = $ionicPopup.alert({
         title: "Round Report submitted."
+        });
       });
     $state.go('tab.dash');
   };
@@ -45,13 +72,19 @@ angular.module('starter.controllers', ['firebase','ionic'])
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
+      if(typeof $rootScope.judge.comments == 'undefined'){
+        $rootScope.judge.comments = "-1";
+      }
       var ref = new Firebase("https://judge-prefs.firebaseio.com/");
       var array = $firebaseArray(ref.child("user_uploads"));
+      array.$loaded().then(function(array) {
+      $rootScope.judge.upload_number = array.length+1;
       array.$add($rootScope.judge);
       var alertPopup = $ionicPopup.alert({
         title: "Round Report submitted."
       });
       $state.go('tab.dash');
+      });
     }
     else {
       var alertPopuptwo = $ionicPopup.alert({
