@@ -1,25 +1,56 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('rr-itCtrl', function($scope, $rootScope, $state) {
+.controller('ChatsCtrl', function($scope, Chats) {
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+  $scope.chats = Chats.all();
+  $scope.remove = function(chat) {
+    Chats.remove(chat);
+  };
+})
+
+.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+  $scope.chat = Chats.get($stateParams.chatId);
+})
+
+.controller('AccountCtrl', function($scope) {
+  $scope.settings = {
+    enableFriends: true
+  };
+})
+
+.controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray) {
   $scope.judgethree = {};
 
   $scope.rrSubmitOp = function(judgethree) {
     $rootScope.judge.comments = judgethree.comments;
     $rootScope.judge.rfd = "-1";
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
     alert("Round report submitted.");
     $state.go('tab.dash');
   };
 })
 
-.controller('rr-tCtrl', function($scope, $rootScope, $state) {
+.controller('rr-tCtrl', function($scope, $rootScope, $state, $firebaseArray) {
   $scope.judgetwo = {};
 
   $scope.rrSubmit = function(judgetwo) {
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
       $rootScope.judge.comments = judgetwo.comments;
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+      var array = $firebaseArray(ref.child("user_uploads"));
+      array.$add($rootScope.judge);
       alert("Round report submitted.");
       $state.go('tab.dash');
     }
