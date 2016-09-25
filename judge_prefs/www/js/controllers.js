@@ -2,7 +2,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-<<<<<<< HEAD
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
