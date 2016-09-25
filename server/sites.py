@@ -2,6 +2,9 @@
 import requests
 from bs4 import BeautifulSoup
 from judge import judge
+import _thread
+import time
+import threading
 class site(object):
     def __init__(self, url, proto = 'https://'):
         """This creates a repersentation of a site from a url such as www.tabroom.com. It assumes the site is https"""
@@ -11,10 +14,14 @@ class site(object):
         self.html = new_html
         self.soup = BeautifulSoup(self.html, 'html.parser')
         self.text = self.soup.get_text()
-    def update_judge_phil(self, first_name, last_name):
+    def update_judge_phil(self, first_name, last_name, already_have = False):
         jud = judge.init_judge_with_name(first_name, last_name)
-        self.query_for_judge(first_name, last_name)
-        jud.update_field('phil', self.get_philiosophy())
+        if not already_have:
+            self.query_for_judge(first_name, last_name)
+        phil = self.get_philiosophy()
+        if phil:
+            jud.update_field('phil', phil)
+        jud.update_field('phil', "No paradigm found")
     def get_philiosophy_base(self, class_string):
         """This function extracts the judge paradigm from the raw html"""
         #TODO abstract later
@@ -25,7 +32,7 @@ class site(object):
 class tabroom(site):
     def __init__(self):
         super().__init__("www.tabroom.com/index/paradigm.mhtml")
-    def query_for_judge(self, first_name, last_name, jud_id = -1):
+    def query_for_judge(self, first_name = "", last_name = "", jud_id = -1):
         #TODO abstract later
         if jud_id != -1:
             res = requests.get(self.url + "?judge_person_id=" + str(jud_id))
@@ -43,6 +50,30 @@ class tabroom(site):
         """Gets the judge name from the page as a list [first, last]"""
         name = self.soup.h2.get_text().lower().replace("paradigm", "").strip()
         return name.split(" ")
+    @staticmethod
+    def create_one_judge(jud_id):
+        print(jud_id)
+        tb = tabroom()
+        tb.query_for_judge(jud_id = jud_id)
+        if tb.is_valid_judge_page():
+            try:
+                fn = tb.get_judge_name()[0]
+            except Exception as e:
+                fn, ls = " ", " "
+            try:
+                ls = tb.get_judge_name()[1]
+            except:
+                ls = " "
+            judge.create_blank_judge(fn, ls)
+            tb.update_judge_phil(fn, ls, already_have = True)
+    @staticmethod
+    def create_all_judges():
+        """This method creates an entry in firebase for every judge in tabroom"""
+        #CHANGE TO 283 AGAIN!!!!
+        for i in range(283, 57630):
+            if _thread._count() > 5:
+                 time.sleep(60)
+            _thread.start_new_thread(tabroom.create_one_judge, (i,))
 class judge_phil(site):
     def __init__(self):
         super().__init__("judgephilosophies.wikispaces.com/")

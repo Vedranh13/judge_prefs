@@ -2,6 +2,8 @@
 # TODO intelligent error checking
 from global_vars import db
 from global_vars import last_upload
+from global_vars import calc_p
+import time
 class fb_object(object):
     """Abstract class for anything repersented in the database such as an upload or a judge"""
     def __init__(self, guid, type):
@@ -18,6 +20,8 @@ class fb_object(object):
         if self.data:
             return True
         return False
+    def get_value(self, field):
+        return self.data[field]
 class judge(fb_object):
     def __init__(self, judge_id):
         """Constructor for judges"""
@@ -26,17 +30,15 @@ class judge(fb_object):
         if not self.does_exist:
             return None
         #TODO potentonally just use self.data
-        self.first_name = self.data['first_name']
+        """self.first_name = self.data['first_name']
         self.last_name = self.data['last_name']
         self.spreading = float(self.data['spreading'])
         self.phil = self.data['phil']
-        self.num_reviews = self.data['num_reviews']
+        self.num_reviews = self.data['num_reviews']"""
         # TODO more metrics
     def calc_new_spreading(self, new_spreading):
         """Takes in a list of new_spreading values and calulates a new average for them"""
         self.update_field('spreading', (sum(new_spreading) + self.get_value('spreading') * self.get_value('num_reviews')) / (self.get_value('num_reviews') + len(new_spreading)))
-    def get_value(self, field):
-        return self.data[field]
     def update_field(self, field, new_value):
         self.data[field] = new_value
         db.child('judges').child(self.guid).update({field :  new_value })
@@ -44,12 +46,17 @@ class judge(fb_object):
     def create_blank_judge(cls, first_name, last_name):
         """Creates a blank judge given a name"""
         data = {
+        "trad_aff_wr" : 0.0,
+        "k_aff_wr" : 0.0,
+        "trad_aff_num" : 0,
+        "k_aff_num" : 0,
         "first_name" : first_name,
         "last_name" : last_name,
         "spreading" : 0.0,
         "num_reviews" : 0,
         "phil" : "I love Ashmita",
         "T" : {
+                "T_num" : 0,
                 "aff_wr" : 0.0,
                 "we_meet_p" : 0.0,
                 "aff_flex_outweighs" : 0.0,
@@ -57,6 +64,7 @@ class judge(fb_object):
                 "condo_p" : 0.0
             },
         "K" : {
+                "K_num" : 0,
                 "aff_wr" : 0.0,
                 "framework_wr" : 0.0,
                 "perm_wr" : 0.0,
@@ -66,6 +74,7 @@ class judge(fb_object):
                 "condo_wr" : 0.0
         },
         "DA" : {
+                "DA_num" : 0,
                 "aff_wr" : 0.0,
                 "case_outweights_wr" : 0.0,
                 "no_link_wr" : 0.0,
@@ -75,6 +84,7 @@ class judge(fb_object):
                 "condo_wr" : 0.0
         },
         "CP" : {
+                "CP_num" : 0,
                 "aff_wr" : 0.0,
                 "perm_wr" : 0.0,
                 "cp_theory_wr" : 0.0,
@@ -84,10 +94,22 @@ class judge(fb_object):
                 "condo_wr" : 0.0
         },
         "impact_turn" : {
+                "it_num" : 0,
                 "aff_wr" : 0.0
         }
         }
         return cls.create_new_judge(data)
+    def process_neg(self, choice, rfd):
+        if choice.upper() == "CP":
+            num = self.get_value(["CP"]["CP_num"]) + 1
+            if rfd == -1:
+                pass
+            dirc = { "CP" : {
+                    "CP_num" : num,
+            }}
+
+    def increment_field(self, field):
+        self.update_field(field, self.get_value(field) + 1)
     @classmethod
     def create_new_judge(cls, data):
         """Create a new judge in firebase from DATA dictionary, returns a new judge object"""
@@ -145,10 +167,6 @@ class upload(fb_object):
         if not self.does_exist:
             print(upload_id)
             return None
-        self.user = self.data['user']
-        self.judge_first_name = self.data['judge_first_name']
-        self.judge_last_name = self.data['judge_last_name']
-        self.speed_pref = self.data['speed_pref']
     def upload_exists(self):
         if self.data:
             return True
@@ -176,4 +194,31 @@ class upload(fb_object):
         return all_ups
     def which_judge(self):
         """This method returns a judge object indicating which judge this upload is refering to"""
-        return judge.init_judge_with_name(self.judge_first_name, self.judge_last_name)
+        return judge.init_judge_with_name(self.get_value('firstName'), self.get_value('lastName'))
+    def process(self):
+        jud = self.which_judge()
+        jud.increment_field('num_reviews')
+        num = jud.get_value('num_reviews')
+        jud.update_field('spreading', ((num - 1) * jud.get_value('spreading') + int(self.get_value('speedPref'))) / num)
+        if self.get_value('aff_type') == "aff_trad":
+            print('t')
+            jud.increment_field("trad_aff_num")
+            if self.get_value('winner') == "aff_win":
+                num = jud.get_value("trad_aff_num")
+                jud.update_field('trad_aff_wr', ((num - 1) * jud.get_value('trad_aff_wr') + 1) / num)
+            else:
+                num = jud.get_value("trad_aff_num")
+                jud.update_field('trad_aff_wr', ((num - 1) * jud.get_value('trad_aff_wr')) / num)
+        if self.get_value('aff_type') == "aff_k":
+            print('k')
+            jud.increment_field("k_aff_num")
+            if self.get_value('winner') == "aff_win":
+                num = jud.get_value("k_aff_num")
+                print(num)
+                jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num, won = True))
+            else:
+                num = jud.get_value("k_aff_num")
+                print(num)
+                jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
+        if self.get_value('neg_choice') == "cp":
+            pass
