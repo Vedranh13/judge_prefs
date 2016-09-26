@@ -30,30 +30,35 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var alertPopup = $ionicPopup.alert({
         title: "Round Report submitted."
         });
+      $state.go('tab.dash');
       });
-    $state.go('tab.dash');
   };
 })
 
 .controller('searchCtrl', function($scope, $state, $firebaseArray, $ionicPopup, $rootScope)  {
- var ref = new Firebase("http://judge-prefs.firebaseio.com/judges");
- var judges = $firebaseArray(ref);
+ // var ref = new Firebase("http://judge-prefs.firebaseio.com/judges");
+ // var judges = $firebaseArray(ref);
  $scope.finder = {};
  $scope.searchNext = function() {
    var judgeFound = 0;
-   for(var i = 0; i < judges.length; i++) {
-    if ($scope.finder.f.toLowerCase() == judges[i].first_name && $scope.finder.l.toLowerCase() == judges[i].last_name) {
-       judgeFound=1;
-       $rootScope.jid = judges[i].$id;
-       alert($rootScope.jid);
-       $state.go('sj-results');
-     }
-   }
-    if(judgeFound===0){
-      var alertPopupThree = $ionicPopup.alert({
-        title: "Judge Not Found."
-        });
-   }
+   var ref = new Firebase("https://judge-prefs.firebaseio.com/");
+   var array = $firebaseArray(ref.child("judges"));
+   array.$loaded().then(function(array) {
+     alert("database loaded");
+    //  for(var i = 0; i < judges.length; i++) {
+    // if (($scope.finder.f.toLowerCase() == judges[i].first_name) && ($scope.finder.l.toLowerCase() == judges[i].last_name)) {
+    //    judgeFound=1;
+    //    $rootScope.jid = judges[i].$id;
+    //    alert($rootScope.jid);
+    //    $state.go('sj-results');
+  //    }
+  //  }
+  //   if(judgeFound===0){
+  //     var alertPopupThree = $ionicPopup.alert({
+  //       title: "Judge Not Found."
+  //       });
+  //  }
+});
 };})
 
 
