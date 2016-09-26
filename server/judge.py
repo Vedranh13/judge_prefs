@@ -266,6 +266,38 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }
             self.update_field('DA', dirc)
+        if choice.upper() == "T":
+            print("T")
+            num = self.get_value("T")["T_num"] + 1
+            if up.get_value('winner') == 'aff_win':
+                wr = calc_p(self.get_value('T')['aff_wr'], num, won = True)
+            else:
+                wr = calc_p(self.get_value('T')['aff_wr'], num)
+                return
+            if up.get_value('rfd') == "we_meet":
+                wm = calc_p(self.get_value('T')['we_meet_p'], num, won = True)
+            else:
+                wm = calc_p(self.get_value('T')['we_meet_p'], num)
+            if up.get_value('rfd') == "aff_flex":
+                af = calc_p(self.get_value('T')['aff_flex_outweighs'], num, won = True)
+            else:
+                af = calc_p(self.get_value('T')['aff_flex_outweighs'], num)
+            if up.get_value('rfd') == "reasonability":
+                res = calc_p(self.get_value('T')['reasonability_p'], num, won = True)
+            else:
+                res = calc_p(self.get_value('T')['reasonability_p'], num)
+            if up.get_value('rfd') == "condo":
+                condo = calc_p(self.get_value('T')['condo_p'], num, won = True)
+            else:
+                condo = calc_p(self.get_value('T')['condo_p'], num)
+            dictk = {
+                "T_num" : num,
+                "aff_wr" : wr,
+                "we_meet_p" : wm,
+                "aff_flex_outweighs" : af,
+                "reasonability_p" : res,
+                "condo_p" : condo
+            }
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
