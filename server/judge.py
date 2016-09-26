@@ -29,11 +29,11 @@ class fb_object(object):
         if action == 'remove':
             db.child(self.type).child(self.guid).remove()
         if action == 'get_val':
-            db.child(self.type).child(self.guid).get().val()
+            return db.child(self.type).child(self.guid).get().val()
         if action == 'update':
-            assert not params, "Must pass in data and field value to update"
+            assert params, "Must pass in data and field value to update"
             self.data[params[0]] = params[1]
-            db.child(self.type).child(self.guid).update({ params[0], params[1]})
+            db.child(self.type).child(self.guid).update({ params[0] : params[1]})
     def remove(self):
         self.perfrom_fb_call('remove')
     def get_value_live(self, field):
@@ -117,12 +117,12 @@ class judge(fb_object):
         }
         }
         return cls.create_new_judge(data)
-    def calc_wr(self, up, target, cat, update, search_term = 'rfd'):
+    def calc_wr(self, up, target, cat, update, num, search_term = 'rfd'):
         """returns the win_rate
         """
         if up.get_value(search_term) == target:
-            return calc_p(self.get_value(cat)[update])
-
+            return calc_p(self.get_value(cat)[update], num, won = True)
+        return calc_p(self.get_value(cat)[update], num)
     def process_neg(self, up):
         choice = up.get_value('neg_choice')
         if choice.upper() == "IT":
@@ -143,6 +143,7 @@ class judge(fb_object):
                 wr = calc_p(self.get_value('CP')['aff_wr'], num, won = True)
             else:
                 wr = calc_p(self.get_value('CP')['aff_wr'], num)
+            #wr = self.calc_wr(up, 'aff_wins', 'CP', 'aff_wr', num, 'winner')
             if up.get_value('rfd') == "perm":
                 perm = calc_p(self.get_value('CP')['perm_wr'], num, won = True)
             else:
@@ -220,15 +221,17 @@ class judge(fb_object):
                     }
             self.update_field('K', dirc)
         if choice.upper() == "DA":
+            print("DA")
             num = self.get_value("DA")["DA_num"] + 1
+            print('DA_num:', num)
             if up.get_value('winner') == 'aff_wins':
                 wr = calc_p(self.get_value('DA')['aff_wr'], num, won = True)
             else:
                 wr = calc_p(self.get_value('DA')['aff_wr'], num)
-            if up.get_value('rfd') == "framework":
-                frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
+            if up.get_value('rfd') == "case_outweights":
+                out = calc_p(self.get_value('DA')['case_outweights_wr'], num, won = True)
             else:
-                frame = calc_p(self.get_value('K')['framework_wr'], num)
+                out = calc_p(self.get_value('DA')['case_outweights_wr'], num)
             if up.get_value('rfd') == 'perm':
                 perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
             else:
@@ -246,20 +249,20 @@ class judge(fb_object):
             else:
                 links = calc_p(self.get_value('K')['case_outweights_wr'], num)
             if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('CP')['condo'], num, won = True)
+                condo = calc_p(self.get_value('K')['condo_wr'], num, won = True)
             else:
-                condo = calc_p(self.get_value('CP')['condo'], num)
+                condo = calc_p(self.get_value('K')['condo_wr'], num)
             dirc = {
-                    "K_num" : num,
+                    "DA_num" : num,
                     "aff_wr" : wr,
-                    "framework_wr" : frame,
+                    "case_outweights_wr" : out,
                     "perm_wr" : perm,
                     "impact_turn_wr" : it,
                     "no_alt_solvency_wr" : sol,
                     "case_outweights_wr" : links,
                     "condo_wr" : condo
                     }
-            self.update_field('K', dirc)
+            self.update_field('DA', dirc)
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
@@ -328,22 +331,18 @@ class upload(fb_object):
         #TODO DRY
         #TODO make this not cancer
         #TODO Error checking
-        global last_upload
-        last_upload += 1
         try:
             return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
         except Exception as e:
-            last_upload -= 1
             return None
         return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
-    @staticmethod
-    def get_all_new_uploads():
-        next_up = upload.get_next_upload()
-        all_ups = []
-        while next_up:
-            all_ups.append(next_up)
-            next_up = upload.get_next_upload()
-        return all_ups
+    @classmethod
+    def get_all_new_uploads(cls):
+        all_ups = db.child('user_uploads').get().val().items()
+        all_new_ups = []
+        for up in all_ups:
+            all_new_ups.append(cls(str(up[0])))
+        return all_new_ups
     def which_judge(self):
         """This method returns a judge object indicating which judge this upload is refering to"""
         return judge.init_judge_with_name(self.get_value('firstName'), self.get_value('lastName'))
@@ -373,3 +372,4 @@ class upload(fb_object):
                 print(num)
                 jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
         jud.process_neg(self)
+        self.remove()
