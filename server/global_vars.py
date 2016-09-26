@@ -11,9 +11,6 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
-global last_upload
-#TODO persistance is good
-last_upload = 4
 """Explanation of debate terms / jduge variables:
 spreading : judge preference for fasting talking out of ten
 trad_aff : the percent of times the judge will vote affirmative on a traditional case
