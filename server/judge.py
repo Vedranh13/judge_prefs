@@ -6,10 +6,11 @@ from global_vars import calc_p
 import time
 class fb_object(object):
     """Abstract class for anything repersented in the database such as an upload or a judge"""
-    def __init__(self, guid, type):
+    def __init__(self, guid, type_of):
         """Takes in a str GUID and a string TYPE and fetches all the data from fb"""
         self.guid = guid
-        self.data = db.child(type).child(self.guid).get().val()
+        self.type = type_of
+        self.data = self.perfrom_fb_call('get_val')
         self.orig_data = self.data.copy()
         self.does_exist = True
         if not self.exists():
@@ -22,6 +23,26 @@ class fb_object(object):
         return False
     def get_value(self, field):
         return self.data[field]
+    def perfrom_fb_call(self, action, params = []):
+        """This method make the call to the firebase api that corresponds to ACTION"""
+        assert type(action) == str, "Action must be a string"
+        if action == 'remove':
+            db.child(self.type).child(self.guid).remove()
+        if action == 'get_val':
+            db.child(self.type).child(self.guid).get().val()
+        if action == 'update':
+            assert not params, "Must pass in data and field value to update"
+            self.data[params[0]] = params[1]
+            db.child(self.type).child(self.guid).update({ params[0], params[1]})
+    def remove(self):
+        self.perfrom_fb_call('remove')
+    def get_value_live(self, field):
+        data = self.perfrom_fb_call('get_val')
+        if data:
+            self.data = data
+            return self.get_value(field)
+    def update_field(self, field, new_value):
+        self.perfrom_fb_call('update', params = [field, new_value])
 class judge(fb_object):
     def __init__(self, judge_id):
         """Constructor for judges"""
@@ -39,9 +60,6 @@ class judge(fb_object):
     def calc_new_spreading(self, new_spreading):
         """Takes in a list of new_spreading values and calulates a new average for them"""
         self.update_field('spreading', (sum(new_spreading) + self.get_value('spreading') * self.get_value('num_reviews')) / (self.get_value('num_reviews') + len(new_spreading)))
-    def update_field(self, field, new_value):
-        self.data[field] = new_value
-        db.child('judges').child(self.guid).update({field :  new_value })
     @classmethod
     def create_blank_judge(cls, first_name, last_name):
         """Creates a blank judge given a name"""
