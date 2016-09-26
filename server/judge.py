@@ -1,9 +1,7 @@
 """File for repersenting firebase data"""
 # TODO intelligent error checking
 from global_vars import db
-from global_vars import last_upload
 from global_vars import calc_p
-import time
 class fb_object(object):
     """Abstract class for anything repersented in the database such as an upload or a judge"""
     def __init__(self, guid, type_of):
@@ -138,12 +136,14 @@ class judge(fb_object):
             }
             self.update_field('impact_turn', dictk)
         if choice.upper() == "CP":
+            print('CP')
             num = self.get_value("CP")["CP_num"] + 1
-            if up.get_value('winner') == 'aff_wins':
+            if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('CP')['aff_wr'], num, won = True)
             else:
                 wr = calc_p(self.get_value('CP')['aff_wr'], num)
-            #wr = self.calc_wr(up, 'aff_wins', 'CP', 'aff_wr', num, 'winner')
+                return
+            #wr = self.calc_wr(up, 'aff_win', 'CP', 'aff_wr', num, 'winner')
             if up.get_value('rfd') == "perm":
                 perm = calc_p(self.get_value('CP')['perm_wr'], num, won = True)
             else:
@@ -181,10 +181,11 @@ class judge(fb_object):
             self.update_field('CP', dirc)
         if choice.upper() == "K":
             num = self.get_value("K")["K_num"] + 1
-            if up.get_value('winner') == 'aff_wins':
+            if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('K')['aff_wr'], num, won = True)
             else:
                 wr = calc_p(self.get_value('K')['aff_wr'], num)
+                return
             if up.get_value('rfd') == "framework":
                 frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
             else:
@@ -224,42 +225,44 @@ class judge(fb_object):
             print("DA")
             num = self.get_value("DA")["DA_num"] + 1
             print('DA_num:', num)
-            if up.get_value('winner') == 'aff_wins':
+            if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('DA')['aff_wr'], num, won = True)
+                print('aff')
             else:
                 wr = calc_p(self.get_value('DA')['aff_wr'], num)
+                return
             if up.get_value('rfd') == "case_outweights":
                 out = calc_p(self.get_value('DA')['case_outweights_wr'], num, won = True)
             else:
                 out = calc_p(self.get_value('DA')['case_outweights_wr'], num)
-            if up.get_value('rfd') == 'perm':
-                perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
+            if up.get_value('rfd') == 'no_link_thumpers':
+                no_link = calc_p(self.get_value('DA')['no_link_wr'], num, won = True)
             else:
-                perm = calc_p(self.get_value('K')['perm_wr'], num)
+                no_link = calc_p(self.get_value('DA')['no_link_wr'], num)
+            if up.get_value('rfd') == 'no_impact':
+                it = calc_p(self.get_value('DA')['no_impact_wr'], num, won = True)
+            else:
+                it = calc_p(self.get_value('DA')['no_impact_wr'], num)
+            if up.get_value('rfd') == 'link_turn':
+                link = calc_p(self.get_value('DA')['link_turn_wr'], num, won = True)
+            else:
+                link = calc_p(self.get_value('DA')['link_turn_wr'], num)
             if up.get_value('rfd') == 'impact_turn':
-                it = calc_p(self.get_value('K')['impact_turn_wr'], num, won = True)
+                im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num, won = True)
             else:
-                it = calc_p(self.get_value('K')['impact_turn_wr'], num)
-            if up.get_value('rfd') == 'no_alt':
-                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num, won = True)
-            else:
-                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num)
-            if up.get_value('rfd') == 'case_outweights':
-                links = calc_p(self.get_value('K')['case_outweights_wr'], num, won = True)
-            else:
-                links = calc_p(self.get_value('K')['case_outweights_wr'], num)
+                im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num)
             if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('K')['condo_wr'], num, won = True)
+                condo = calc_p(self.get_value('DA')['condo_wr'], num, won = True)
             else:
-                condo = calc_p(self.get_value('K')['condo_wr'], num)
+                condo = calc_p(self.get_value('DA')['condo_wr'], num)
             dirc = {
                     "DA_num" : num,
                     "aff_wr" : wr,
                     "case_outweights_wr" : out,
-                    "perm_wr" : perm,
-                    "impact_turn_wr" : it,
-                    "no_alt_solvency_wr" : sol,
-                    "case_outweights_wr" : links,
+                    "no_link_wr" : no_link,
+                    "no_impact_wr" : it,
+                    "link_turn_wr" : link,
+                    "impact_turn_wr" : im_turn,
                     "condo_wr" : condo
                     }
             self.update_field('DA', dirc)
@@ -268,9 +271,8 @@ class judge(fb_object):
     @classmethod
     def create_new_judge(cls, data):
         """Create a new judge in firebase from DATA dictionary, returns a new judge object"""
-        if cls.is_data_valid(data):
-            return cls(db.child("judges").push(data)['name'])
-        return None # TODO something intelligent here. Raise Exception maybe?
+        return cls(db.child("judges").push(data)['name'])
+        # TODO some intelligent error checking here. Raise Exception maybe?
     @classmethod
     def init_judge_with_name(cls, first, last):
         # TODO Handel reps
@@ -326,7 +328,7 @@ class upload(fb_object):
         if self.data:
             return True
         return False
-    @classmethod
+    """@classmethod
     def get_next_upload(cls):
         #TODO DRY
         #TODO make this not cancer
@@ -335,7 +337,7 @@ class upload(fb_object):
             return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
         except Exception as e:
             return None
-        return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])
+        return cls(list(dict(db.child('user_uploads').order_by_child('upload_number').equal_to(last_upload).get().val().items()).keys())[0])"""
     @classmethod
     def get_all_new_uploads(cls):
         all_ups = db.child('user_uploads').get().val().items()
