@@ -2,13 +2,13 @@
   <ion-content class="padding" ng-controller="sj-resultsCtrl">
     <ion-list>
       <ion-item class="bar bar-header bar-dark">
-        <h1 class="title">Judge Name: {{ $scope.jinfo["first_name"] }}</h1>
+        <h1 class="title">Judge Name: {{first_name}} {{last_name}} </h1>
       </ion-item>
       <ion-item>
         <div class="row">
           <div class="col">
             <div class="text-center">
-                <h2 style="text-align: center;">Speed Preference: </h2>
+                <h2 style="text-align: center;">Speed Preference: {{spreading}}/10</h2>
             </div>
           </div>
         </div>
@@ -17,17 +17,17 @@
         <h1 class="title">Aff Type:</h1>
       </ion-item>
       <ion-item>
-        <h3>Traditional- Aff Win Percent: </h3>
-        <h3>Traditional- Neg Win Percent: </h3>
-        <h3>Kritikal- Aff Win Percent: </h3>
-        <h3>Kritikal- Neg Win Percent: </h3>
+        <h3>Traditional- Aff Win Percent: {{trad_aff_wr}}%</h3>
+        <h3>Traditional- Neg Win Percent: {{trad_aff_wr_neg}}% </h3>
+        <h3>Kritikal- Aff Win Percent: {{k_aff_wr}}% </h3>
+        <h3>Kritikal- Neg Win Percent: {{k_aff_wr_neg}}% </h3>
       </ion-item>
       <ion-item class="bar bar-header bar-royal">
         <h1 class="title">2NR - Topicality:</h1>
       </ion-item>
       <ion-item>
-        <h3>Aff Win Percent: </h3>
-        <h3>Neg Win Percent: </h3>
+        <h3>Aff Win Percent: {{t_aff_wr}}%</h3>
+        <h3>Neg Win Percent: {{t_aff_wr_neg}}%</h3>
         <div class="row">
           <div class="col">
             <div class="text-center">
@@ -35,17 +35,17 @@
             </div>
           </div>
         </div>
-        <h3>We Meet: </h3>
-        <h3>Aff Flex Outweighs Limits: </h3>
-        <h3>Reasonability: </h3>
-        <h3>Condo: </h3>
+        <h3>We Meet: {{t_we_meet_p}}%</h3>
+        <h3>Aff Flex Outweighs Limits: {{t_aff_flex_outweighs}}%</h3>
+        <h3>Reasonability: {{t_reasonability_p}}%</h3>
+        <h3>Condo: {{t_condo_p}}%</h3>
       </ion-item>
       <ion-item class="bar bar-header bar-royal">
         <h1 class="title">2NR - Kritik:</h1>
       </ion-item>
       <ion-item>
-        <h3>Aff Win Percent: </h3>
-        <h3>Neg Win Percent: </h3>
+        <h3>Aff Win Percent: {{k_aff_wr}}%</h3>
+        <h3>Neg Win Percent: {{k_aff_wr_neg}}%</h3>
         <div class="row">
           <div class="col">
             <div class="text-center">
@@ -53,38 +53,39 @@
             </div>
           </div>
         </div>
-        <h3>Framework: </h3>
-        <h3>Perm: </h3>
-        <h3>Impact Turn: </h3>
-        <h3>No Alt Solvency: </h3>
-        <h3>Case Outweighs: </h3>
-        <h3>Condo: </h3>
+        <h3>Framework: {{k_framework_wr}}%</h3>
+        <h3>Perm: {{k_perm_wr}}%</h3>
+        <h3>Impact Turn: {{k_impact_turn_wr}}%</h3>
+        <h3>No Alt Solvency: {{k_no_alt_solvency_wr}}%</h3>
+        <h3>Case Outweighs: {{k_case_outweighs_wr}}%</h3>
+        <h3>Condo: {{k_condo_wr}}%</h3>
       </ion-item>
       <ion-item class="bar bar-header bar-royal">
         <h1 class="title">2NR - Counterplan:</h1>
       </ion-item>
       <ion-item>
-        <h3>Aff Win Percent: </h3>
-        <h3>Neg Win Percent: </h3>
+        <h3>Aff Win Percent: {{cp_aff_wr}}%</h3>
+        <h3>Neg Win Percent: {{cp_aff_wr_neg}}%</h3>
         <div class="row">
           <div class="col">
-            <div class="text-center">
+            <div c{{lass="text-center">
                 <h3 style="text-align: center;">Votes Aff On --</h3>
             </div>
           </div>
-        </div>        <h3>Perm: </h3>
-        <h3>Theory: </h3>
-        <h3>Solvency Deficit: </h3>
-        <h3>Offense on Net Benefit: </h3>
-        <h3>Links to Net Benefit: </h3>
-        <h3>Condo: </h3>
+        </div>
+        <h3>Perm: {{cp_perm_wr}}%</h3>
+        <h3>Theory: {{cp_cp_theory_wr}}%</h3>
+        <h3>Solvency Deficit: {{cp_solvency_deficit}}%</h3>
+        <h3>Offense on Net Benefit: {{cp_offense_on_net_benefit}}%</h3>
+        <h3>Links to Net Benefit: {{cp_links_to_net_benefit}}%</h3>
+        <h3>Condo: {{cp_condo_wr}}%</h3>
       </ion-item>
       <ion-item class="bar bar-header bar-royal">
         <h1 class="title">2NR - Disadvantage:</h1>
       </ion-item>
       <ion-item>
-        <h3>Aff Win Percent: </h3>
-        <h3>Neg Win Percent: </h3>
+        <h3>Aff Win Percent: {{da_aff_wr}}%</h3>
+        <h3>Neg Win Percent: {{da_aff_wr_neg}}%</h3>
         <div class="row">
           <div class="col">
             <div class="text-center">
@@ -92,25 +93,25 @@
             </div>
           </div>
         </div>
-        <h3>Case Outweighs: </h3>
-        <h3>No Link / Thumpers: </h3>
-        <h3>Link Turn: </h3>
-        <h3>No Impact: </h3>
-        <h3>Impact Turn: </h3>
-        <h3>Condo: </h3>
+        <h3>Case Outweighs: {{da_case_outweighs_wr}}%</h3>
+        <h3>No Link / Thumpers: {{da_no_link_wr}}%</h3>
+        <h3>Link Turn: {{da_link_turn_wr}}%</h3>
+        <h3>No Impact: {{da_no_impact_wr}}%</h3>
+        <h3>Impact Turn: {{da_impact_turn_wr}}%</h3>
+        <h3>Condo: {{da_condo_wr}}%</h3>
       </ion-item>
       <ion-item class="bar bar-header bar-royal">
         <h1 class="title">2NR - Impact Turn:</h1>
       </ion-item>
       <ion-item>
-        <h3>Aff Win Percent: </h3>
-        <h3>Neg Win Percent: </h3>
+        <h3>Aff Win Percent: {{impact_turn_aff_wr}}%</h3>
+        <h3>Neg Win Percent: {{impact_turn_aff_wr_neg}}%</h3>
       </ion-item>
       <ion-item class="bar bar-header bar-balanced">
         <h1 class="title">Judge Philosophy:</h1>
       </ion-item>
       <ion-item>
-        <h3>Insert Judge Philosophy</h3>
+        <h3>{{phil}}</h3>
       </ion-item>
     </ion-list>
   </ion-content>

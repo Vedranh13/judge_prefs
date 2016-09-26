@@ -2,13 +2,84 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('sj-resultsCtrl', function($scope,$rootScope,$firebaseArray) {
+.controller('sj-resultsCtrl', function($scope,$rootScope) {
 
-      var ref = new Firebase("https://judge-prefs.firebaseio.com/");
-      var array = $firebaseArray(ref.child("judges"));
-      array.$loaded().then(function(array) {
-        $scope.jinfo = array[$rootScope.jid]; //need a judge name
-      });
+      $scope.first_name = $rootScope.first_name;
+      $scope.last_name = $rootScope.last_name;
+      $scope.spreading = $rootScope.spreading;
+
+      $scope.k_aff_wr = $rootScope.k_aff_wr * 10;
+      $scope.trad_aff_wr = $rootScope.trad_aff_wr  * 10;
+      if ($scope.trad_aff_wr === 0) {
+        $scope.trad_aff_wr_neg = 0;
+      } else {
+        $scope.trad_aff_wr_neg = 100 - $scope.trad_aff_wr;
+      }
+      if ($scope.k_aff_wr === 0) {
+        $scope.k_aff_wr_neg = 0;
+      } else {
+        $scope.k_aff_wr_neg = 100 - $scope.k_aff_wr;
+      }
+
+      $scope.t_aff_wr = $rootScope.t_aff_wr * 10;
+      if ($scope.t_aff_wr === 0) {
+        $scope.t_aff_wr_neg = 0;
+      } else {
+        $scope.t_aff_wr_neg = 100 - $scope.t_aff_wr;
+      }
+      $scope.t_we_meet_p = $rootScope.t_we_meet_p * 10;
+      $scope.t_aff_flex_outweighs = $rootScope.t_aff_flex_outweighs * 10;
+      $scope.t_reasonability_p = $rootScope.t_reasonability_p * 10;
+      $scope.t_condo_p = $rootScope.t_condo_p * 10;
+
+      $scope.k_aff_wr = $rootScope.k_aff_wr * 10;
+      if ($scope.k_aff_wr === 0) {
+        $scope.k_aff_wr_neg = 0;
+      } else {
+        $scope.k_aff_wr_neg = 100 - $scope.k_aff_wr;
+      }
+      $scope.k_framework_wr = $rootScope.k_framework_wr * 10;
+      $scope.k_case_outweighs_wr = $rootScope.k_case_outweighs_wr * 10;
+      $scope.k_perm_wr = $rootScope.k_perm_wr * 10;
+      $scope.k_impact_turn_wr = $rootScope.k_impact_turn_wr * 10;
+      $scope.k_no_alt_solvency_wr = $rootScope.k_no_alt_solvency_wr * 10;
+      $scope.k_condo_wr = $rootScope.k_condo_wr * 10;
+
+      $scope.cp_aff_wr = $rootScope.cp_aff_wr * 10;
+      if ($scope.cp_aff_wr === 0) {
+        $scope.cp_aff_wr_neg = 0;
+      } else {
+        $scope.cp_aff_wr_neg = 100 - $scope.cp_aff_wr;
+      }
+      $scope.cp_condo_wr = $rootScope.cp_condo_wr * 10;
+      $scope.cp_perm_wr = $rootScope.cp_perm_wr * 10;
+      $scope.cp_cp_theory_wr = $rootScope.cp_cp_theory_wr * 10;
+      $scope.cp_offense_on_net_benefit = $rootScope.cp_offense_on_net_benefit * 10;
+      $scope.cp_links_to_net_benefit = $rootScope.cp_links_to_net_benefit * 10;
+      $scope.cp_solvency_deficit = $rootScope.cp_solvency_deficit * 10;
+
+      $scope.da_aff_wr = $rootScope.da_aff_wr * 10;
+      if ($scope.da_aff_wr === 0) {
+        $scope.da_aff_wr_neg = 0;
+      } else {
+        $scope.da_aff_wr_neg = 100 - $scope.da_aff_wr;
+      }
+      $scope.da_condo_wr = $rootScope.da_condo_wr * 10;
+      $scope.da_case_outweighs_wr = $rootScope.da_case_outweighs_wr * 10;
+      $scope.da_no_link_wr = $rootScope.da_no_link_wr * 10;
+      $scope.da_link_turn_wr = $rootScope.da_link_turn_wr * 10;
+      $scope.da_no_impact_wr = $rootScope.da_no_impact_wr * 10;
+      $scope.da_impact_turn_wr = $rootScope.da_impact_turn_wr * 10;
+
+      $scope.impact_turn_aff_wr = $rootScope.impact_turn_aff_wr * 10;
+      if ($scope.impact_turn_aff_wr === 0) {
+        $scope.impact_turn_aff_wr_neg = 0;
+      } else {
+        $scope.impact_turn_aff_wr_neg = 100 - $scope.impact_turn_aff_wr;
+      }
+
+      $scope.phil = $rootScope.phil;
+
 })
 
 .controller('rr-itCtrl', function($scope, $rootScope, $state,$firebaseArray, $ionicPopup) {
@@ -43,54 +114,65 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
   $scope.searchNext = function() {
 
-    var firstNameLower = $scope.finder.f.toLowerCase();
-    var lastNameLower = $scope.finder.l.toLowerCase();
+    if ($scope.finder.f && $scope.finder.l) {
 
-    ref.orderByChild("last_name").equalTo(lastNameLower).on("child_added", function(snapshot) {
-      if (snapshot.child("first_name").val() == firstNameLower) {
+      var firstNameLower = $scope.finder.f.toLowerCase();
+      var lastNameLower = $scope.finder.l.toLowerCase();
 
-      $rootScope.first_name = firstNameLower;
-      $rootScope.last_name = lastNameLower;
-      $rootScope.spreading = snapshot.child("spreading").val();
+      ref.orderByChild("last_name").equalTo(lastNameLower).on("child_added", function(snapshot) {
+        if (snapshot.child("first_name").val() == firstNameLower) {
 
-      $rootScope.k_aff_wr = snapshot.child("k_aff_wr").val();
-      $rootScope.trad_aff_wr = snapshot.child("trad_aff_wr").val();
+          $rootScope.first_name = firstNameLower.substring(0,1).toUpperCase() + firstNameLower.substring(1);
+          $rootScope.last_name = lastNameLower.substring(0,1).toUpperCase() + lastNameLower.substring(1);
+          $rootScope.spreading = snapshot.child("spreading").val();
 
-      $rootScope.t_aff_wr = snapshot.child("T").child("aff_wr").val();
-      $rootScope.t_we_meet_p = judges[i].T.we_meet_p;
-      $rootScope.t_aff_flex_outweighs = judges[i].T.aff_flex_outweighs;
-      $rootScope.t_reasonability_p = judges[i].T.reasonability_p;
-      $rootScope.t_condo_p = judges[i].T.condo_p;
+          $rootScope.k_aff_wr = snapshot.child("k_aff_wr").val();
+          $rootScope.trad_aff_wr = snapshot.child("trad_aff_wr").val();
 
-      $rootScope.k_aff_wr = judges[i].K.aff_wr;
-      $rootScope.k_framework_wr = judges[i].K.framework_wr;
-      $rootScope.k_case_outweighs_wr = judges[i].K.case_outweighs_wr;
-      $rootScope.k_perm_wr = judges[i].K.perm_wr;
-      $rootScope.k_impact_turn_wr = judges[i].K.impact_turn_wr;
-      $rootScope.k_no_alt_solvency_wr = judges[i].K.no_alt_solvency_wr;
-      $rootScope.k_condo_wr = judges[i].K.condo_wr;
+          $rootScope.t_aff_wr = snapshot.child("T").child("aff_wr").val();
+          $rootScope.t_we_meet_p = snapshot.child("T").child("we_meet").val();
+          $rootScope.t_aff_flex_outweighs = snapshot.child("T").child("aff_flex_outweighs").val();
+          $rootScope.t_reasonability_p = snapshot.child("T").child("reasonability_p").val();
+          $rootScope.t_condo_p = snapshot.child("T").child("condo_p").val();
 
-      $rootScope.cp_aff_wr = judges[i].CP.aff_wr;
-      $rootScope.cp_condo_wr = judges[i].CP.condo_wr;
-      $rootScope.cp_perm_wr = judges[i].CP.perm_wr;
-      $rootScope.cp_cp_theory_wr = judges[i].CP.cp_theory_wr;
-      $rootScope.cp_offense_on_net_benefit = judges[i].CP.offense_on_net_benefit;
-      $rootScope.cp_links_to_net_benefit = judges[i].CP.links_to_net_benefit;
-      $rootScope.cp_solvency_deficit = judges[i].CP.solvency_deficit;
+          $rootScope.k_aff_wr = snapshot.child("K").child("aff_wr").val();
+          $rootScope.k_framework_wr = snapshot.child("K").child("framework_wr").val();
+          $rootScope.k_case_outweighs_wr = snapshot.child("K").child("case_outweighs_wr").val();
+          $rootScope.k_perm_wr = snapshot.child("K").child("perm_wr").val();
+          $rootScope.k_impact_turn_wr = snapshot.child("K").child("impact_turn_wr").val();
+          $rootScope.k_no_alt_solvency_wr = snapshot.child("K").child("no_alt_solvency_wr").val();
+          $rootScope.k_condo_wr = snapshot.child("K").child("condo_wr").val();
 
-      $rootScope.da_aff_wr = judges[i].DA.aff_wr;
-      $rootScope.da_condo_wr = judges[i].DA.condo_wr;
-      $rootScope.da_case_outweighs_wr = judges[i].DA.case_outweighs_wr;
-      $rootScope.da_no_link_wr = judges[i].DA.no_link_wr;
-      $rootScope.da_link_turn_wr = judges[i].DA.link_turn_wr;
-      $rootScope.da_no_impact_wr = judges[i].DA.no_impact_wr;
-      $rootScope.da_impact_turn_wr = judges[i].DA.impact_turn_wr;
+          $rootScope.cp_aff_wr = snapshot.child("CP").child("aff_wr").val();
+          $rootScope.cp_condo_wr = snapshot.child("CP").child("condo_wr").val();
+          $rootScope.cp_perm_wr = snapshot.child("CP").child("perm_wr").val();
+          $rootScope.cp_cp_theory_wr = snapshot.child("CP").child("cp_theory_wr").val();
+          $rootScope.cp_offense_on_net_benefit = snapshot.child("CP").child("offense_on_net_benefit").val();
+          $rootScope.cp_links_to_net_benefit = snapshot.child("CP").child("links_to_net_benefit").val();
+          $rootScope.cp_solvency_deficit = snapshot.child("CP").child("solvency_deficit").val();
 
-      $rootScope.impact_turn_aff_wr = judges[i].impact_turn.aff_wr;
+          $rootScope.da_aff_wr = snapshot.child("DA").child("aff_wr").val();
+          $rootScope.da_condo_wr = snapshot.child("DA").child("condo_wr").val();
+          $rootScope.da_case_outweighs_wr = snapshot.child("DA").child("case_outweighs_wr").val();
+          $rootScope.da_no_link_wr = snapshot.child("DA").child("no_link_wr").val();
+          $rootScope.da_link_turn_wr = snapshot.child("DA").child("link_turn_wr").val();
+          $rootScope.da_no_impact_wr = snapshot.child("DA").child("no_impact_wr").val();
+          $rootScope.da_impact_turn_wr = snapshot.child("DA").child("impact_turn_wr").val();
 
-      $rootScope.phil = judges[i].phil;
-      }
-    });
+          $rootScope.impact_turn_aff_wr = snapshot.child("impact_turn").child("aff_wr").val();
+
+          $rootScope.phil = snapshot.child("phil").val();
+
+          $state.go('sj-results');
+        }
+
+      });
+
+    } else {
+      var alertPopuptwo = $ionicPopup.alert({
+        title: "Input first and last name."
+      });
+    }
 
   };
 
