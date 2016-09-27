@@ -106,7 +106,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
   };
 })
 
-.controller('searchCtrl', function($scope, $state, $firebaseObject, $ionicPopup, $rootScope) {
+.controller('searchCtrl', function($scope, $state, $ionicPopup, $rootScope) {
 
   $scope.finder = {};
 
@@ -119,7 +119,23 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var firstNameLower = $scope.finder.f.toLowerCase();
       var lastNameLower = $scope.finder.l.toLowerCase();
 
+      var numChildren;
+      var count = 0;
+
+      ref.orderByChild("last_name").equalTo(lastNameLower).on("value", function(snapshot) {
+        numChildren = snapshot.numChildren();
+      });
+
+      if (numChildren === 0) {
+        var alertPopup = $ionicPopup.alert({
+          title: "Judge not found."
+        });
+      } else {
+
       ref.orderByChild("last_name").equalTo(lastNameLower).on("child_added", function(snapshot) {
+
+        count++;
+
         if (snapshot.child("first_name").val() == firstNameLower) {
 
           $rootScope.first_name = firstNameLower.substring(0,1).toUpperCase() + firstNameLower.substring(1);
@@ -164,9 +180,14 @@ angular.module('starter.controllers', ['firebase','ionic'])
           $rootScope.phil = snapshot.child("phil").val();
 
           $state.go('sj-results');
+        } else if (count == numChildren) {
+          var alertPopup = $ionicPopup.alert({
+            title: "Judge not found."
+          });
         }
 
       });
+    }
 
     } else {
       var alertPopuptwo = $ionicPopup.alert({
