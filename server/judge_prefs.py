@@ -1,5 +1,6 @@
 """This is the "main script" which will be run and from where the actual work will be done"""
 from judge import upload
+from judge import judge
 from sites import tabroom
 from global_vars import db
 import getopt, sys
@@ -13,8 +14,23 @@ def remove_dup(arg):
         for jud in all_judges[1:]:
             db.child('judges').child(jud[0]).remove()
 def main(argv):
-    opts, args = getopt.getopt(argv,"upd:",['remove_all_dups'])
+    opts, args = getopt.getopt(argv,"upd:",['remove_all_dups', 'update-phil'])
     for opt, arg in opts:
+        if opt == '--update-phil':
+            all_judges = list(db.child('judges').get().val().items())
+            print('downloaded')
+            tb = tabroom()
+            for key, data in all_judges:
+                print(key, data['first_name'], data['last_name'])
+                if data['phil'].lower() != 'i love ashmita' and data['phil'] != "no paradigm found":
+                    print('     looking up paradigm')
+                    if tb.update_judge_phil(data['first_name'], data['last_name']):
+                        print('phil not found')
+                    else:
+                        print('phil found')
+                else:
+                    print('     paradigm already known')
+            exit()
         if opt == '-p':
             #Process uploads mode
             all_new_ups = upload.get_all_new_uploads()
