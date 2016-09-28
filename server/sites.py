@@ -12,13 +12,17 @@ class site(object):
         self.soup = BeautifulSoup(self.html, 'html.parser')
         self.text = self.soup.get_text()
     def update_judge_phil(self, first_name, last_name, already_have = False):
+        """This method fetches the philosophy for the judge whose name is past in. It returns 0 if a
+        philiosophy is found and 1 if not, in which case the phil field in FB is set to No paradigm found"""
         jud = judge.init_judge_with_name(first_name, last_name)
         if not already_have:
             self.query_for_judge(first_name, last_name)
         phil = self.get_philiosophy()
         if phil:
             jud.update_field('phil', phil)
+            return 0
         jud.update_field('phil', "No paradigm found")
+        return 1
     def get_philiosophy_base(self, class_string):
         """This function extracts the judge paradigm from the raw html"""
         #TODO abstract later
