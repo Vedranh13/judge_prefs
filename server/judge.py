@@ -32,6 +32,10 @@ class fb_object(object):
             assert params, "Must pass in data and field value to update"
             self.data[params[0]] = params[1]
             db.child(self.type).child(self.guid).update({ params[0] : params[1]})
+        if action == 'push':
+            return db.child(self.type).push(params[0])
+    def push(self, data):
+        return self.perfrom_fb_call('action', params = [data])
     def remove(self):
         self.perfrom_fb_call('remove')
     def get_value_live(self, field):
@@ -41,6 +45,19 @@ class fb_object(object):
             return self.get_value(field)
     def update_field(self, field, new_value):
         self.perfrom_fb_call('update', params = [field, new_value])
+class comments(fb_object):
+    """A Class repersenting user comments on their judges"""
+    def __init__(self, comment_id):
+        super().__init__(comment_id, 'comments')
+        if not self.does_exist:
+            return None
+    @classmethod
+    def create_comment(cls, text, judge_id):
+        dirct = {
+            "text" : text,
+            "judge_id" : judge_id
+        }
+        return cls(db.child('comments').push(dirct)['name'])
 class judge(fb_object):
     def __init__(self, judge_id):
         """Constructor for judges"""
@@ -122,8 +139,8 @@ class judge(fb_object):
             return calc_p(self.get_value(cat)[update], num, won = True)
         return calc_p(self.get_value(cat)[update], num)
     def process_neg(self, up):
-        choice = up.get_value('neg_choice')
-        if choice.upper() == "IT":
+        choice = up.get_value('neg_choice').upper()
+        if choice == "IT":
             print('hey from it')
             num = self.get_value("impact_turn")["it_num"] + 1
             if up.get_value('winner') == 'aff_win':
@@ -135,7 +152,7 @@ class judge(fb_object):
                 "aff_wr" : wr
             }
             self.update_field('impact_turn', dictk)
-        if choice.upper() == "CP":
+        elif choice == "CP":
             print('CP')
             num = self.get_value("CP")["CP_num"] + 1
             if up.get_value('winner') == 'aff_win':
@@ -179,7 +196,7 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }
             self.update_field('CP', dirc)
-        if choice.upper() == "K":
+        elif choice == "K":
             num = self.get_value("K")["K_num"] + 1
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('K')['aff_wr'], num, won = True)
@@ -221,7 +238,7 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }
             self.update_field('K', dirc)
-        if choice.upper() == "DA":
+        elif choice == "DA":
             print("DA")
             num = self.get_value("DA")["DA_num"] + 1
             print('DA_num:', num)
@@ -266,7 +283,7 @@ class judge(fb_object):
                     "condo_wr" : condo
                     }
             self.update_field('DA', dirc)
-        if choice.upper() == "T":
+        elif choice == "T":
             print("T")
             num = self.get_value("T")["T_num"] + 1
             if up.get_value('winner') == 'aff_win':
@@ -406,4 +423,7 @@ class upload(fb_object):
                 print(num)
                 jud.update_field('k_aff_wr', calc_p(jud.get_value('k_aff_wr'), num))
         jud.process_neg(self)
+        text = self.get_value('comments')
+        if text != '-1' and text:
+            comments.create_comment(text, jud.guid)
         self.remove()

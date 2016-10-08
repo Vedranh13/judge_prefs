@@ -208,7 +208,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
 //     }
 //
 //   };
-// 
+//
 // })
 
 .controller('searchresultsCtrl', function($scope, $rootScope, $state) {
