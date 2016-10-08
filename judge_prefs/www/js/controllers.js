@@ -36,8 +36,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
           array.$add($rootScope.judge);
 
           var alertPopup = $ionicPopup.alert({title: "Round Report Submitted."});
-          $ionicHistory.nextViewOptions({disableBack: true});
-          $state.go('home');
+          $ionicHistory.goBack(-1);
           break;
         case "aff_win":
           switch (judge.neg_choice) {
@@ -63,8 +62,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
               array.$add($rootScope.judge);
 
               var alertPopup2 = $ionicPopup.alert({title: "Round Report Submitted."});
-              $ionicHistory.nextViewOptions({disableBack: true});
-              $state.go('home');
+              $ionicHistory.goBack(-1);
               break;
           }
           break;
@@ -93,8 +91,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       array.$add($rootScope.judge);
 
       var alertPopup4 = $ionicPopup.alert({title: "Round Report Submitted."});
-      $ionicHistory.nextViewOptions({disableBack: true});
-      $state.go('home');
+      $ionicHistory.goBack(-2);
     }
     else {
       var alertPopup5 = $ionicPopup.alert({title: "Please enter the reason for decision."});
