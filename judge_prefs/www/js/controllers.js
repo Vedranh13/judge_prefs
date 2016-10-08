@@ -102,114 +102,78 @@ angular.module('starter.controllers', ['firebase','ionic'])
   };
 })
 
-.controller('searchCtrl', function($scope, $rootScope, $ionicPopup, $state, $FirebaseArray) {
+.controller('searchCtrl', function($scope, $rootScope, $ionicPopup, $state) {
 
   $scope.finder = {};
 
   $scope.searchNext = function(finder) {
-    var ref = new Firebase("https://judge-prefs.firebaseio.com/judges");
-
     if ($scope.finder.f && $scope.finder.l) {
-      $state.go('searchresults');
+      var ref = new Firebase("https://judge-prefs.firebaseio.com/judges");
+      var firstNameLower = $scope.finder.f.toLowerCase();
+      var lastNameLower = $scope.finder.l.toLowerCase();
+
+      ref.orderByChild("last_name").equalTo(lastNameLower).on("value", function(snapshot2) {
+        var judgeFound = false;
+        snapshot2.forEach(function(child) {
+          if ((child.child("last_name").val() == lastNameLower) && (child.child("first_name").val() == firstNameLower)) {
+            judgeFound = true;
+
+            var snapshot = child;
+
+            $rootScope.first_name = firstNameLower.substring(0,1).toUpperCase() + firstNameLower.substring(1);
+            $rootScope.last_name = lastNameLower.substring(0,1).toUpperCase() + lastNameLower.substring(1);
+            $rootScope.spreading = snapshot.child("spreading").val();
+
+            $rootScope.k_aff_wr = snapshot.child("k_aff_wr").val();
+            $rootScope.trad_aff_wr = snapshot.child("trad_aff_wr").val();
+
+            $rootScope.t_aff_wr = snapshot.child("T").child("aff_wr").val();
+            $rootScope.t_we_meet_p = snapshot.child("T").child("we_meet").val();
+            $rootScope.t_aff_flex_outweighs = snapshot.child("T").child("aff_flex_outweighs").val();
+            $rootScope.t_reasonability_p = snapshot.child("T").child("reasonability_p").val();
+            $rootScope.t_condo_p = snapshot.child("T").child("condo_p").val();
+
+            $rootScope.k_aff_wr = snapshot.child("K").child("aff_wr").val();
+            $rootScope.k_framework_wr = snapshot.child("K").child("framework_wr").val();
+            $rootScope.k_case_outweighs_wr = snapshot.child("K").child("case_outweighs_wr").val();
+            $rootScope.k_perm_wr = snapshot.child("K").child("perm_wr").val();
+            $rootScope.k_impact_turn_wr = snapshot.child("K").child("impact_turn_wr").val();
+            $rootScope.k_no_alt_solvency_wr = snapshot.child("K").child("no_alt_solvency_wr").val();
+            $rootScope.k_condo_wr = snapshot.child("K").child("condo_wr").val();
+
+            $rootScope.cp_aff_wr = snapshot.child("CP").child("aff_wr").val();
+            $rootScope.cp_condo_wr = snapshot.child("CP").child("condo_wr").val();
+            $rootScope.cp_perm_wr = snapshot.child("CP").child("perm_wr").val();
+            $rootScope.cp_cp_theory_wr = snapshot.child("CP").child("cp_theory_wr").val();
+            $rootScope.cp_offense_on_net_benefit = snapshot.child("CP").child("offense_on_net_benefit").val();
+            $rootScope.cp_links_to_net_benefit = snapshot.child("CP").child("links_to_net_benefit").val();
+            $rootScope.cp_solvency_deficit = snapshot.child("CP").child("solvency_deficit").val();
+
+            $rootScope.da_aff_wr = snapshot.child("DA").child("aff_wr").val();
+            $rootScope.da_condo_wr = snapshot.child("DA").child("condo_wr").val();
+            $rootScope.da_case_outweighs_wr = snapshot.child("DA").child("case_outweighs_wr").val();
+            $rootScope.da_no_link_wr = snapshot.child("DA").child("no_link_wr").val();
+            $rootScope.da_link_turn_wr = snapshot.child("DA").child("link_turn_wr").val();
+            $rootScope.da_no_impact_wr = snapshot.child("DA").child("no_impact_wr").val();
+            $rootScope.da_impact_turn_wr = snapshot.child("DA").child("impact_turn_wr").val();
+
+            $rootScope.impact_turn_aff_wr = snapshot.child("impact_turn").child("aff_wr").val();
+
+            $rootScope.phil = snapshot.child("phil").val();
+
+            $state.go('searchresults');
+          }
+        });
+        if (judgeFound === false) {
+          var alertPopup6 = $ionicPopup.alert({title: "Judge Not Found."});
+        }
+      });
+
     } else {
-      var alertPopup6 = $ionicPopup.alert({title: "Please enter name."});
+      var alertPopup7 = $ionicPopup.alert({title: "Please enter name."});
     }
   };
-
 })
-
-// .controller('searchCtrlOld', function($scope, $state, $ionicPopup, $rootScope) {
-//
-//   $scope.finder = {};
-//
-//   var ref = new Firebase("https://judge-prefs.firebaseio.com/judges");
-//
-//   $scope.searchNext = function(finder) {
-//
-//     if ($scope.finder.f && $scope.finder.l) {
-//
-//       var firstNameLower = $scope.finder.f.toLowerCase();
-//       var lastNameLower = $scope.finder.l.toLowerCase();
-//
-//       var numChildren;
-//       var count = 0;
-//
-//       ref.orderByChild("last_name").equalTo(lastNameLower).on("value", function(snapshot) {
-//         numChildren = snapshot.numChildren();
-//       });
-//
-//       if (numChildren === 0) {
-//         var alertPopup = $ionicPopup.alert({
-//           title: "Judge not found."
-//         });
-//       } else {
-//
-//       ref.orderByChild("last_name").equalTo(lastNameLower).on("child_added", function(snapshot) {
-//
-//         count++;
-//
-//         if (snapshot.child("first_name").val() == firstNameLower) {
-//
-//           $rootScope.first_name = firstNameLower.substring(0,1).toUpperCase() + firstNameLower.substring(1);
-//           $rootScope.last_name = lastNameLower.substring(0,1).toUpperCase() + lastNameLower.substring(1);
-//           $rootScope.spreading = snapshot.child("spreading").val();
-//
-//           $rootScope.k_aff_wr = snapshot.child("k_aff_wr").val();
-//           $rootScope.trad_aff_wr = snapshot.child("trad_aff_wr").val();
-//
-//           $rootScope.t_aff_wr = snapshot.child("T").child("aff_wr").val();
-//           $rootScope.t_we_meet_p = snapshot.child("T").child("we_meet").val();
-//           $rootScope.t_aff_flex_outweighs = snapshot.child("T").child("aff_flex_outweighs").val();
-//           $rootScope.t_reasonability_p = snapshot.child("T").child("reasonability_p").val();
-//           $rootScope.t_condo_p = snapshot.child("T").child("condo_p").val();
-//
-//           $rootScope.k_aff_wr = snapshot.child("K").child("aff_wr").val();
-//           $rootScope.k_framework_wr = snapshot.child("K").child("framework_wr").val();
-//           $rootScope.k_case_outweighs_wr = snapshot.child("K").child("case_outweighs_wr").val();
-//           $rootScope.k_perm_wr = snapshot.child("K").child("perm_wr").val();
-//           $rootScope.k_impact_turn_wr = snapshot.child("K").child("impact_turn_wr").val();
-//           $rootScope.k_no_alt_solvency_wr = snapshot.child("K").child("no_alt_solvency_wr").val();
-//           $rootScope.k_condo_wr = snapshot.child("K").child("condo_wr").val();
-//
-//           $rootScope.cp_aff_wr = snapshot.child("CP").child("aff_wr").val();
-//           $rootScope.cp_condo_wr = snapshot.child("CP").child("condo_wr").val();
-//           $rootScope.cp_perm_wr = snapshot.child("CP").child("perm_wr").val();
-//           $rootScope.cp_cp_theory_wr = snapshot.child("CP").child("cp_theory_wr").val();
-//           $rootScope.cp_offense_on_net_benefit = snapshot.child("CP").child("offense_on_net_benefit").val();
-//           $rootScope.cp_links_to_net_benefit = snapshot.child("CP").child("links_to_net_benefit").val();
-//           $rootScope.cp_solvency_deficit = snapshot.child("CP").child("solvency_deficit").val();
-//
-//           $rootScope.da_aff_wr = snapshot.child("DA").child("aff_wr").val();
-//           $rootScope.da_condo_wr = snapshot.child("DA").child("condo_wr").val();
-//           $rootScope.da_case_outweighs_wr = snapshot.child("DA").child("case_outweighs_wr").val();
-//           $rootScope.da_no_link_wr = snapshot.child("DA").child("no_link_wr").val();
-//           $rootScope.da_link_turn_wr = snapshot.child("DA").child("link_turn_wr").val();
-//           $rootScope.da_no_impact_wr = snapshot.child("DA").child("no_impact_wr").val();
-//           $rootScope.da_impact_turn_wr = snapshot.child("DA").child("impact_turn_wr").val();
-//
-//           $rootScope.impact_turn_aff_wr = snapshot.child("impact_turn").child("aff_wr").val();
-//
-//           $rootScope.phil = snapshot.child("phil").val();
-//
-//           $state.go('searchresults');
-//         } else if (count == numChildren) {
-//           var alertPopup = $ionicPopup.alert({
-//             title: "Judge not found."
-//           });
-//         }
-//
-//       });
-//     }
-//
-//     } else {
-//       var alertPopuptwo = $ionicPopup.alert({
-//         title: "Input first and last name."
-//       });
-//     }
-//
-//   };
-//
-// })
 
 .controller('searchresultsCtrl', function($scope, $rootScope, $state) {
 
