@@ -248,7 +248,7 @@ class judge(fb_object):
             else:
                 wr = calc_p(self.get_value('DA')['aff_wr'], num)
                 return
-            if up.get_value('rfd') == "case_outweights":
+            if up.get_value('rfd') == "case_outweighs":
                 out = calc_p(self.get_value('DA')['case_outweights_wr'], num, won = True)
             else:
                 out = calc_p(self.get_value('DA')['case_outweights_wr'], num)
@@ -292,6 +292,7 @@ class judge(fb_object):
                 wr = calc_p(self.get_value('T')['aff_wr'], num)
                 return
             if up.get_value('rfd') == "we_meet":
+                print('wm')
                 wm = calc_p(self.get_value('T')['we_meet_p'], num, won = True)
             else:
                 wm = calc_p(self.get_value('T')['we_meet_p'], num)
@@ -315,6 +316,7 @@ class judge(fb_object):
                 "reasonability_p" : res,
                 "condo_p" : condo
             }
+            self.update_field('T', dictk)
     def increment_field(self, field):
         self.update_field(field, self.get_value(field) + 1)
     @classmethod
