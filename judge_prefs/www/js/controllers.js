@@ -186,6 +186,14 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
             var snapshot = child;
 
+            $rootScope.k_aff_num = snapshot.child("k_aff_num").val();
+            $rootScope.trad_aff_num = snapshot.child("trad_aff_num").val();
+            $rootScope.T_num = snapshot.child("T_num").val();
+            $rootScope.K_num = snapshot.child("K_num").val();
+            $rootScope.CP_num = snapshot.child("CP_num").val();
+            $rootScope.DA_num = snapshot.child("DA_num").val();
+            $rootScope.it_num = snapshot.child("it_num").val();
+
             $rootScope.first_name = firstNameLower.substring(0,1).toUpperCase() + firstNameLower.substring(1);
             $rootScope.last_name = lastNameLower.substring(0,1).toUpperCase() + lastNameLower.substring(1);
             $rootScope.spreading = snapshot.child("spreading").val();
@@ -249,19 +257,19 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
       $scope.k_aff_wr = $rootScope.k_aff_wr * 10;
       $scope.trad_aff_wr = $rootScope.trad_aff_wr  * 10;
-      if ($scope.trad_aff_wr === 0) {
+      if ($rootScope.trad_aff_num === 0) {
         $scope.trad_aff_wr_neg = 0;
       } else {
         $scope.trad_aff_wr_neg = 100 - $scope.trad_aff_wr;
       }
-      if ($scope.k_aff_wr === 0) {
+      if ($rootScope.k_aff_num === 0) {
         $scope.k_aff_wr_neg = 0;
       } else {
         $scope.k_aff_wr_neg = 100 - $scope.k_aff_wr;
       }
 
       $scope.t_aff_wr = $rootScope.t_aff_wr * 10;
-      if ($scope.t_aff_wr === 0) {
+      if ($rootScope.T_num === 0) {
         $scope.t_aff_wr_neg = 0;
       } else {
         $scope.t_aff_wr_neg = 100 - $scope.t_aff_wr;
@@ -272,7 +280,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $scope.t_condo_p = $rootScope.t_condo_p * 10;
 
       $scope.k_aff_wr = $rootScope.k_aff_wr * 10;
-      if ($scope.k_aff_wr === 0) {
+      if ($rootScope.K_num === 0) {
         $scope.k_aff_wr_neg = 0;
       } else {
         $scope.k_aff_wr_neg = 100 - $scope.k_aff_wr;
@@ -285,7 +293,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $scope.k_condo_wr = $rootScope.k_condo_wr * 10;
 
       $scope.cp_aff_wr = $rootScope.cp_aff_wr * 10;
-      if ($scope.cp_aff_wr === 0) {
+      if ($rootScope.CP_num === 0) {
         $scope.cp_aff_wr_neg = 0;
       } else {
         $scope.cp_aff_wr_neg = 100 - $scope.cp_aff_wr;
@@ -298,7 +306,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $scope.cp_solvency_deficit = $rootScope.cp_solvency_deficit * 10;
 
       $scope.da_aff_wr = $rootScope.da_aff_wr * 10;
-      if ($scope.da_aff_wr === 0) {
+      if ($rootScope.DA_num === 0) {
         $scope.da_aff_wr_neg = 0;
       } else {
         $scope.da_aff_wr_neg = 100 - $scope.da_aff_wr;
@@ -311,7 +319,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $scope.da_impact_turn_wr = $rootScope.da_impact_turn_wr * 10;
 
       $scope.impact_turn_aff_wr = $rootScope.impact_turn_aff_wr * 10;
-      if ($scope.impact_turn_aff_wr === 0) {
+      if ($rootScope.it_num === 0) {
         $scope.impact_turn_aff_wr_neg = 0;
       } else {
         $scope.impact_turn_aff_wr_neg = 100 - $scope.impact_turn_aff_wr;
