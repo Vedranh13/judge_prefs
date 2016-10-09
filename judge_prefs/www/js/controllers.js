@@ -19,6 +19,76 @@ angular.module('starter.controllers', ['firebase','ionic'])
   $scope.rrNext = function(judge) {
 
     if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
+      var refJudges = new Firebase("https://judge-prefs.firebaseio.com/judges");
+      var firstNameLower = judge.firstName.toLowerCase();
+      var lastNameLower = judge.lastName.toLowerCase();
+
+      refJudges.orderByChild("last_name").equalTo(lastNameLower).on("value", function(snapshot2) {
+        var judgeFound = false;
+        snapshot2.forEach(function(child) {
+          if ((child.child("last_name").val() == lastNameLower) && (child.child("first_name").val() == firstNameLower)) {
+            judgeFound = true;
+          }
+        });
+
+        if (judgeFound === false) {
+
+          var newJudge = {};
+
+          newJudge.first_name = $rootScope.judge.firstName.toLowerCase();
+          newJudge.last_name = $rootScope.judge.lastName.toLowerCase();
+          newJudge.k_aff_num = 0;
+          newJudge.k_aff_wr = 0;
+          newJudge.num_reviews = 0;
+          newJudge.phil = "No paradigm found";
+          newJudge.spreading = 0;
+          newJudge.trad_aff_num = 0;
+          newJudge.trad_aff_wr = 0;
+          newJudge.impact_turn = {};
+          newJudge.impact_turn.aff_wr = 0;
+          newJudge.impact_turn.it_num = 0;
+          newJudge.T = {};
+          newJudge.T.T_num = 0;
+          newJudge.T.aff_flex_outweighs = 0;
+          newJudge.T.aff_wr = 0;
+          newJudge.T.condo_p = 0;
+          newJudge.T.reasonability_p = 0;
+          newJudge.T.we_meet_p = 0;
+          newJudge.K = {};
+          newJudge.K.K_num = 0;
+          newJudge.K.aff_wr = 0;
+          newJudge.K.case_outweighs_wr = 0;
+          newJudge.K.condo_wr = 0;
+          newJudge.K.framework_wr = 0;
+          newJudge.K.impact_turn_wr = 0;
+          newJudge.K.no_alt_solvency_wr = 0;
+          newJudge.K.perm_wr = 0;
+          newJudge.DA = {};
+          newJudge.DA.DA_num = 0;
+          newJudge.DA.aff_wr = 0;
+          newJudge.DA.case_outweighs_wr = 0;
+          newJudge.DA.condo_wr = 0;
+          newJudge.DA.impact_turn_wr = 0;
+          newJudge.DA.link_turn_wr = 0;
+          newJudge.DA.no_impact_wr = 0;
+          newJudge.DA.no_link_wr = 0;
+          newJudge.CP = {};
+          newJudge.CP.CP_num = 0;
+          newJudge.CP.aff_wr = 0;
+          newJudge.CP.condo_wr = 0;
+          newJudge.CP.cp_theory_wr = 0;
+          newJudge.CP.links_to_net_benefit = 0;
+          newJudge.CP.offense_on_net_benefit = 0;
+          newJudge.CP.perm_wr = 0;
+          newJudge.CP.solvency_deficit = 0;
+
+          refJudges.push(newJudge);
+
+        }
+      });
+    }
+
+    if (judge.firstName && judge.lastName && judge.speedPref && judge.aff_type && judge.neg_choice && judge.winner) {
 
       var ref = new Firebase("https://judge-prefs.firebaseio.com/user_uploads");
       var array = $firebaseArray(ref);
@@ -66,66 +136,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
           }
           break;
       }
-
-      var ref2 = new Firebase("https://judge-prefs.firebaseio.com/judges");
-      var array2 = $firebaseArray(ref2);
-      var firstNameLower = judge.firstName.toLowerCase();
-      var lastNameLower = judge.firstName.toLowerCase();
-      $scope.newJudge = {};
-
-      ref2.orderByChild("last_name").equalTo(lastNameLower).on("value", function(snapshot2) {
-        var judgeFound = false;
-        snapshot2.forEach(function(child) {
-          if ((child.child("last_name").val() == lastNameLower) && (child.child("first_name").val() == firstNameLower)) {
-            judgeFound = true;
-          }
-        });
-        if (judgeFound === false) {
-          newJudge.first_name = firstNameLower;
-          newJudge.last_name = lastnameLower;
-          newJudge.k_aff_num = 0;
-          newJudge.k_aff_wr = 0;
-          newJudge.num_reviews = 0;
-          newJudge.phil = "No paradigm found";
-          newJudge.spreading = 0;
-          newJudge.trad_aff_num = 0;
-          newJudge.trad_aff_wr = 0;
-          newJudge.impact_turn.aff_wr = 0;
-          newJudge.impact_turn.it_num = 0;
-          newJudge.T.T_num = 0;
-          newJudge.T.aff_flex_outweighs = 0;
-          newJudge.T.aff_wr = 0;
-          newJudge.T.condo_p = 0;
-          newJudge.T.reasonability_p = 0;
-          newJudge.T.we_meet_p = 0;
-          newJudge.K.K_num = 0;
-          newJudge.K.aff_wr = 0;
-          newJudge.K.case_outweighs_wr = 0;
-          newJudge.K.condo_wr = 0;
-          newJudge.K.framework_wr = 0;
-          newJudge.K.impact_turn_wr = 0;
-          newJudge.K.no_alt_solvency_wr = 0;
-          newJudge.K.perm_wr = 0;
-          newJudge.DA.DA_num = 0;
-          newJudge.DA.aff_wr = 0;
-          newJudge.DA.case_outweighs_wr = 0;
-          newJudge.DA.condo_wr = 0;
-          newJudge.DA.impact_turn_wr = 0;
-          newJudge.DA.link_turn_wr = 0;
-          newJudge.DA.no_impact_wr = 0;
-          newJudge.DA.no_link_wr = 0;
-          newJudge.CP.CP_num = 0;
-          newJudge.CP.aff_wr = 0;
-          newJudge.CP.condo_wr = 0;
-          newJudge.CP.cp_theory_wr = 0;
-          newJudge.CP.links_to_net_benefit = 0;
-          newJudge.CP.offense_on_net_benefit = 0;
-          newJudge.CP.perm_wr = 0;
-          newJudge.CP.solvency_deficit = 0;
-
-          array2.$add(newJudge);
-        }
-      });
     }
     else {
       var alertPopup3 = $ionicPopup.alert({title: "Please enter all fields."});
