@@ -325,6 +325,11 @@ angular.module('starter.controllers', ['firebase','ionic'])
         $scope.impact_turn_aff_wr_neg = Math.round(100 - $scope.impact_turn_aff_wr);
       }
 
-      $scope.phil = $rootScope.phil;
+      if ($rootScope.phil == "I love Ashmita") {
+        $scope.phil = "No paradigm found";
+      }
+      else {
+        $scope.phil = $rootScope.phil;
+      }
 
 });
