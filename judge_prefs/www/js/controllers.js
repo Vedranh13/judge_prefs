@@ -253,7 +253,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
       $scope.first_name = $rootScope.first_name;
       $scope.last_name = $rootScope.last_name;
-      $scope.spreading = $rootScope.spreading;
+      $scope.spreading = Math.round($rootScope.spreading);
 
       $scope.aff_k_aff_wr = Math.round($rootScope.aff_k_aff_wr * 100);
       $scope.trad_aff_wr = Math.round($rootScope.trad_aff_wr  * 100);
