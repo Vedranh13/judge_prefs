@@ -93,10 +93,12 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var ref = new Firebase("https://judge-prefs.firebaseio.com/user_uploads");
       var array = $firebaseArray(ref);
       $rootScope.judge = judge;
+      if (($rootScope.judge.comments === null) || ($rootScope.judge.comments === "")) {
+        $rootScope.judge.comments = "-1";
+      }
 
       switch (judge.winner) {
         case "neg_win":
-          $rootScope.judge.comments = "-1";
           $rootScope.judge.rfd = "-1";
           $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
           $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
@@ -122,7 +124,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
               $state.go('rr-da');
               break;
             case "it":
-              $rootScope.judge.comments = "-1";
               $rootScope.judge.rfd = "-1";
               $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
               $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
@@ -149,7 +150,6 @@ angular.module('starter.controllers', ['firebase','ionic'])
   $scope.rrSubmit = function(judgetwo) {
     if (judgetwo.rfd) {
       $rootScope.judge.rfd = judgetwo.rfd;
-      $rootScope.judge.comments = "-1";
       $rootScope.judge.firstName = $rootScope.judge.firstName.toLowerCase();
       $rootScope.judge.lastName = $rootScope.judge.lastName.toLowerCase();
 
@@ -202,7 +202,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
             $rootScope.trad_aff_wr = snapshot.child("trad_aff_wr").val();
 
             $rootScope.t_aff_wr = snapshot.child("T").child("aff_wr").val();
-            $rootScope.t_we_meet_p = snapshot.child("T").child("we_meet").val();
+            $rootScope.t_we_meet_p = snapshot.child("T").child("we_meet_p").val();
             $rootScope.t_aff_flex_outweighs = snapshot.child("T").child("aff_flex_outweighs").val();
             $rootScope.t_reasonability_p = snapshot.child("T").child("reasonability_p").val();
             $rootScope.t_condo_p = snapshot.child("T").child("condo_p").val();
