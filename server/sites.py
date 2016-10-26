@@ -2,6 +2,7 @@
 import requests
 from bs4 import BeautifulSoup
 from judge import judge
+import dryscrape
 class site(object):
     def __init__(self, url, proto = 'https://'):
         """This creates a repersentation of a site from a url such as www.tabroom.com. It assumes the site is https"""
@@ -18,7 +19,7 @@ class site(object):
         if not already_have:
             self.query_for_judge(first_name, last_name)
         phil = self.get_philiosophy()
-        if phil:
+        if phil and phil != '\n':
             jud.update_field('phil', phil)
             return 0
         jud.update_field('phil', "No paradigm found")
@@ -67,10 +68,14 @@ class tabroom(site):
                 ls = " "
             judge.create_blank_judge(fn, ls)
             tb.update_judge_phil(fn, ls, already_have = True)
+            # if tb.update_judge_phil(fn, ls, already_have = True) == 1:
+            #     judge_phil.update_judge_phil(fn, ls, already_have = True)
+            #INCLUDE IN V2.0
     @staticmethod
     def create_all_judges():
         """This method creates an entry in firebase for every judge in tabroom"""
         #CHANGE TO 283 AGAIN!!!!
+        tabroom.create_one_judge(1)
         for i in range(283, 57630):
             tabroom.create_one_judge(i)
 class judge_phil(site):
@@ -78,7 +83,16 @@ class judge_phil(site):
         super().__init__("judgephilosophies.wikispaces.com/")
     def query_for_judge(self, first_name, last_name):
         #TODO abstract later
-        res = requests.get(self.url + last_name + "%2C+" + first_name)
-        self.update_html(res.text)
+        session = dryscrape.Session()
+        session.visit(self.url + last_name + "%2C+" + first_name)
+        response = session.body()
+        self.update_html(response)
+        print(self.get_philiosophy_base('commentContainer'))
     def get_philiosophy(self):
-        return self.get_philiosophy_base('commentContainer')
+        phil = self.get_philiosophy_base('commentContainer')
+        print(phil)
+        if 'Please sign in' in phil:
+            return None
+        if '\n' == phil:
+            return None
+        return phil

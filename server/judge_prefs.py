@@ -2,6 +2,7 @@
 from judge import upload
 from judge import judge
 from sites import tabroom
+from sites import judge_phil
 from global_vars import db
 import getopt, sys
 def remove_dup(arg):
@@ -14,28 +15,52 @@ def remove_dup(arg):
         for jud in all_judges[1:]:
             db.child('judges').child(jud[0]).remove()
 def main(argv):
-    opts, args = getopt.getopt(argv,"upd:",['remove_all_dups', 'update-phil'])
+    opts, args = getopt.getopt(argv,"upd:",['remove_all_dups', 'update-phil', 'get-id='])
     for opt, arg in opts:
+        if opt == '--get-id':
+            #TODO Consider stroing  jud id in firebase
+            name = arg.split(" ")
+            tb = tabroom()
+            for i in range(283, 57630):
+                print(i)
+                tb.query_for_judge(jud_id = i)
+                if tb.get_judge_name()[0].lower() == name[0].lower() and tb.get_judge_name:
+                    print('jud_id is ' + str(i))
+                    exit()
+            print('judge_not_found')
+            exit()
         if opt == '--update-phil':
             all_judges = list(db.child('judges').get().val().items())
             print('downloaded')
             tb = tabroom()
             for key, data in all_judges:
-                print(key, data['first_name'], data['last_name'])
-                if data['phil'].lower() != 'i love ashmita' and data['phil'] != "no paradigm found":
-                    print('     looking up paradigm')
-                    if tb.update_judge_phil(data['first_name'], data['last_name']):
-                        print('phil not found')
+                try:
+                    print(key, data['first_name'], data['last_name'])
+                    if data['phil'].lower() == 'i love ashmita' or data['phil'].lower() == "no paradigm found":
+                        print('     looking up paradigm')
+                        if tb.update_judge_phil(data['first_name'], data['last_name']):
+                            print('phil not found')
+                        else:
+                            print('phil found')
                     else:
-                        print('phil found')
-                else:
-                    print('     paradigm already known')
+                        print('     paradigm already known')
+                except:
+                    print('fml')
             exit()
         if opt == '-p':
             #Process uploads mode
             all_new_ups = upload.get_all_new_uploads()
             for up in all_new_ups:
-                up.process()
+                try:
+                    up.process()
+                except Exception as e:
+                    #Assumes judge doesn't exist
+                    # TODO: intelligent exceptions
+                    fn, ls = up.get_value('firstName'), up.get_value('lastName')
+                    judge.create_blank_judge(fn, ls)
+
+
+
         if opt == '-u':
             #Update mode = add info on all judges
             tabroom.create_all_judges()

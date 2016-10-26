@@ -157,34 +157,38 @@ class judge(fb_object):
             num = self.get_value("CP")["CP_num"] + 1
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('CP')['aff_wr'], num, won = True)
+                if up.get_value('rfd') == "perm":
+                    perm = calc_p(self.get_value('CP')['perm_wr'], num, won = True)
+                else:
+                    perm = calc_p(self.get_value('CP')['perm_wr'], num)
+                if up.get_value('rfd') == 'theory':
+                    thr = calc_p(self.get_value('CP')['cp_theory_wr'], num, won = True)
+                else:
+                    thr = calc_p(self.get_value('CP')['cp_theory_wr'], num)
+                if up.get_value('rfd') == 'solvency_def':
+                    sol = calc_p(self.get_value('CP')['solvency_deficit'], num, won = True)
+                else:
+                    sol = calc_p(self.get_value('CP')['solvency_deficit'], num)
+                if up.get_value('rfd') == 'net_ben_offense':
+                    off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num, won = True)
+                else:
+                    off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num)
+                if up.get_value('rfd') == 'net_ben_links':
+                    links = calc_p(self.get_value('CP')['links_to_net_benefit'], num, won = True)
+                else:
+                    links = calc_p(self.get_value('CP')['links_to_net_benefit'], num)
+                if up.get_value('rfd') == 'condo':
+                    condo = calc_p(self.get_value('CP')['condo_wr'], num, won = True)
+                else:
+                    condo = calc_p(self.get_value('CP')['condo_wr'], num)
             else:
                 wr = calc_p(self.get_value('CP')['aff_wr'], num)
-                return
-            #wr = self.calc_wr(up, 'aff_win', 'CP', 'aff_wr', num, 'winner')
-            if up.get_value('rfd') == "perm":
-                perm = calc_p(self.get_value('CP')['perm_wr'], num, won = True)
-            else:
-                perm = calc_p(self.get_value('CP')['perm_wr'], num)
-            if up.get_value('rfd') == 'theory':
-                thr = calc_p(self.get_value('CP')['cp_theory_wr'], num, won = True)
-            else:
-                thr = calc_p(self.get_value('CP')['cp_theory_wr'], num)
-            if up.get_value('rfd') == 'solvency_def':
-                sol = calc_p(self.get_value('CP')['solvency_deficit'], num, won = True)
-            else:
-                sol = calc_p(self.get_value('CP')['solvency_deficit'], num)
-            if up.get_value('rfd') == 'net_ben_offense':
-                off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num, won = True)
-            else:
-                off = calc_p(self.get_value('CP')['offense_on_net_benefit'], num)
-            if up.get_value('rfd') == 'net_ben_links':
-                links = calc_p(self.get_value('CP')['links_to_net_benefit'], num, won = True)
-            else:
-                links = calc_p(self.get_value('CP')['links_to_net_benefit'], num)
-            if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('CP')['condo_wr'], num, won = True)
-            else:
-                condo = calc_p(self.get_value('CP')['condo_wr'], num)
+                perm = self.get_value('CP')['perm_wr']
+                thr = self.get_value('CP')['cp_theory_wr']
+                sol = self.get_value('CP')['solvency_deficit']
+                off = self.get_value('CP')['offense_on_net_benefit']
+                links = self.get_value('CP')['links_to_net_benefit']
+                condo = self.get_value('CP')['condo_wr']
             dirc = {
                     "CP_num" : num,
                     "aff_wr" : wr,
@@ -200,33 +204,38 @@ class judge(fb_object):
             num = self.get_value("K")["K_num"] + 1
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('K')['aff_wr'], num, won = True)
+                if up.get_value('rfd') == "framework":
+                    frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
+                else:
+                    frame = calc_p(self.get_value('K')['framework_wr'], num)
+                if up.get_value('rfd') == 'perm':
+                    perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
+                else:
+                    perm = calc_p(self.get_value('K')['perm_wr'], num)
+                if up.get_value('rfd') == 'impact_turn':
+                    it = calc_p(self.get_value('K')['impact_turn_wr'], num, won = True)
+                else:
+                    it = calc_p(self.get_value('K')['impact_turn_wr'], num)
+                if up.get_value('rfd') == 'no_alt':
+                    sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num, won = True)
+                else:
+                    sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num)
+                if up.get_value('rfd') == 'case_outweights':
+                    links = calc_p(self.get_value('K')['case_outweights_wr'], num, won = True)
+                else:
+                    links = calc_p(self.get_value('K')['case_outweights_wr'], num)
+                if up.get_value('rfd') == 'condo':
+                    condo = calc_p(self.get_value('K')['condo_wr'], num, won = True)
+                else:
+                    condo = calc_p(self.get_value('K')['condo_wr'], num)
             else:
                 wr = calc_p(self.get_value('K')['aff_wr'], num)
-                return
-            if up.get_value('rfd') == "framework":
-                frame = calc_p(self.get_value('K')['framework_wr'], num, won = True)
-            else:
-                frame = calc_p(self.get_value('K')['framework_wr'], num)
-            if up.get_value('rfd') == 'perm':
-                perm = calc_p(self.get_value('K')['perm_wr'], num, won = True)
-            else:
-                perm = calc_p(self.get_value('K')['perm_wr'], num)
-            if up.get_value('rfd') == 'impact_turn':
-                it = calc_p(self.get_value('K')['impact_turn_wr'], num, won = True)
-            else:
-                it = calc_p(self.get_value('K')['impact_turn_wr'], num)
-            if up.get_value('rfd') == 'no_alt':
-                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num, won = True)
-            else:
-                sol = calc_p(self.get_value('K')['no_alt_solvency_wr'], num)
-            if up.get_value('rfd') == 'case_outweights':
-                links = calc_p(self.get_value('K')['case_outweights_wr'], num, won = True)
-            else:
-                links = calc_p(self.get_value('K')['case_outweights_wr'], num)
-            if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('K')['condo_wr'], num, won = True)
-            else:
-                condo = calc_p(self.get_value('K')['condo_wr'], num)
+                frame = self.get_value('K')['framework_wr']
+                perm = self.get_value('K')['perm_wr']
+                it = self.get_value('K')['impact_turn_wr']
+                sol = self.get_value('K')['no_alt_solvency_wr']
+                links = self.get_value('K')['case_outweights_wr']
+                condo = self.get_value('K')['condo_wr']
             dirc = {
                     "K_num" : num,
                     "aff_wr" : wr,
@@ -244,34 +253,39 @@ class judge(fb_object):
             print('DA_num:', num)
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('DA')['aff_wr'], num, won = True)
+                if up.get_value('rfd') == "case_outweighs":
+                    out = calc_p(self.get_value('DA')['case_outweights_wr'], num, won = True)
+                else:
+                    out = calc_p(self.get_value('DA')['case_outweights_wr'], num)
+                if up.get_value('rfd') == 'no_link_thumpers':
+                    no_link = calc_p(self.get_value('DA')['no_link_wr'], num, won = True)
+                else:
+                    no_link = calc_p(self.get_value('DA')['no_link_wr'], num)
+                if up.get_value('rfd') == 'no_impact':
+                    it = calc_p(self.get_value('DA')['no_impact_wr'], num, won = True)
+                else:
+                    it = calc_p(self.get_value('DA')['no_impact_wr'], num)
+                if up.get_value('rfd') == 'link_turn':
+                    link = calc_p(self.get_value('DA')['link_turn_wr'], num, won = True)
+                else:
+                    link = calc_p(self.get_value('DA')['link_turn_wr'], num)
+                if up.get_value('rfd') == 'impact_turn':
+                    im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num, won = True)
+                else:
+                    im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num)
+                if up.get_value('rfd') == 'condo':
+                    condo = calc_p(self.get_value('DA')['condo_wr'], num, won = True)
+                else:
+                    condo = calc_p(self.get_value('DA')['condo_wr'], num)
                 print('aff')
             else:
                 wr = calc_p(self.get_value('DA')['aff_wr'], num)
-                return
-            if up.get_value('rfd') == "case_outweighs":
-                out = calc_p(self.get_value('DA')['case_outweights_wr'], num, won = True)
-            else:
-                out = calc_p(self.get_value('DA')['case_outweights_wr'], num)
-            if up.get_value('rfd') == 'no_link_thumpers':
-                no_link = calc_p(self.get_value('DA')['no_link_wr'], num, won = True)
-            else:
-                no_link = calc_p(self.get_value('DA')['no_link_wr'], num)
-            if up.get_value('rfd') == 'no_impact':
-                it = calc_p(self.get_value('DA')['no_impact_wr'], num, won = True)
-            else:
-                it = calc_p(self.get_value('DA')['no_impact_wr'], num)
-            if up.get_value('rfd') == 'link_turn':
-                link = calc_p(self.get_value('DA')['link_turn_wr'], num, won = True)
-            else:
-                link = calc_p(self.get_value('DA')['link_turn_wr'], num)
-            if up.get_value('rfd') == 'impact_turn':
-                im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num, won = True)
-            else:
-                im_turn = calc_p(self.get_value('DA')['impact_turn_wr'], num)
-            if up.get_value('rfd') == 'condo':
-                condo = calc_p(self.get_value('DA')['condo_wr'], num, won = True)
-            else:
-                condo = calc_p(self.get_value('DA')['condo_wr'], num)
+                out = self.get_value('DA')['case_outweights_wr']
+                no_link = self.get_value('DA')['no_link_wr']
+                it = self.get_value('DA')['no_impact_wr']
+                link = self.get_value('DA')['link_turn_wr']
+                im_turn = self.get_value('DA')['impact_turn_wr']
+                condo = self.get_value('DA')['condo_wr']
             dirc = {
                     "DA_num" : num,
                     "aff_wr" : wr,
@@ -288,26 +302,29 @@ class judge(fb_object):
             num = self.get_value("T")["T_num"] + 1
             if up.get_value('winner') == 'aff_win':
                 wr = calc_p(self.get_value('T')['aff_wr'], num, won = True)
+                if up.get_value('rfd') == "we_meet":
+                    print('wm')
+                    wm = calc_p(self.get_value('T')['we_meet_p'], num, won = True)
+                else:
+                    wm = calc_p(self.get_value('T')['we_meet_p'], num)
+                if up.get_value('rfd') == "aff_flex":
+                    af = calc_p(self.get_value('T')['aff_flex_outweighs'], num, won = True)
+                else:
+                    af = calc_p(self.get_value('T')['aff_flex_outweighs'], num)
+                if up.get_value('rfd') == "reasonability":
+                    res = calc_p(self.get_value('T')['reasonability_p'], num, won = True)
+                else:
+                    res = calc_p(self.get_value('T')['reasonability_p'], num)
+                if up.get_value('rfd') == "condo":
+                    condo = calc_p(self.get_value('T')['condo_p'], num, won = True)
+                else:
+                    condo = calc_p(self.get_value('T')['condo_p'], num)
             else:
                 wr = calc_p(self.get_value('T')['aff_wr'], num)
-                return
-            if up.get_value('rfd') == "we_meet":
-                print('wm')
-                wm = calc_p(self.get_value('T')['we_meet_p'], num, won = True)
-            else:
-                wm = calc_p(self.get_value('T')['we_meet_p'], num)
-            if up.get_value('rfd') == "aff_flex":
-                af = calc_p(self.get_value('T')['aff_flex_outweighs'], num, won = True)
-            else:
-                af = calc_p(self.get_value('T')['aff_flex_outweighs'], num)
-            if up.get_value('rfd') == "reasonability":
-                res = calc_p(self.get_value('T')['reasonability_p'], num, won = True)
-            else:
-                res = calc_p(self.get_value('T')['reasonability_p'], num)
-            if up.get_value('rfd') == "condo":
-                condo = calc_p(self.get_value('T')['condo_p'], num, won = True)
-            else:
-                condo = calc_p(self.get_value('T')['condo_p'], num)
+                wm = self.get_value('T')['we_meet_p']
+                af = self.get_value('T')['aff_flex_outweighs']
+                res = self.get_value('T')['reasonability_p']
+                condo = self.get_value('T')['condo_p']
             dictk = {
                 "T_num" : num,
                 "aff_wr" : wr,
