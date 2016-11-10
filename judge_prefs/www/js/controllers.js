@@ -93,7 +93,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
       var ref = new Firebase("https://judge-prefs.firebaseio.com/user_uploads");
       var array = $firebaseArray(ref);
       $rootScope.judge = judge;
-      if (($rootScope.judge.comments === null) || ($rootScope.judge.comments === "")) {
+      if (($rootScope.judge.comments === undefined) || ($rootScope.judge.comments === "")) {
         $rootScope.judge.comments = "-1";
       }
 
@@ -235,6 +235,8 @@ angular.module('starter.controllers', ['firebase','ionic'])
 
             $rootScope.phil = snapshot.child("phil").val();
 
+            $rootScope.num_reviews = snapshot.child("num_reviews").val();
+
             $state.go('searchresults');
           }
         });
@@ -317,6 +319,8 @@ angular.module('starter.controllers', ['firebase','ionic'])
       $scope.da_link_turn_wr = Math.round($rootScope.da_link_turn_wr * 100);
       $scope.da_no_impact_wr = Math.round($rootScope.da_no_impact_wr * 100);
       $scope.da_impact_turn_wr = Math.round($rootScope.da_impact_turn_wr * 100);
+
+      $scope.num_reviews = $rootScope.num_reviews;
 
       $scope.impact_turn_aff_wr = Math.round($rootScope.impact_turn_aff_wr * 100);
       if ($rootScope.it_num === 0) {
