@@ -251,7 +251,7 @@ angular.module('starter.controllers', ['firebase','ionic'])
   };
 })
 
-.controller('searchresultsCtrl', function($scope, $rootScope, $state) {
+.controller('searchresultsCtrl', function($scope, $rootScope, $state, $ionicModal, $ionicPopup, $firebaseArray) {
 
       $scope.first_name = $rootScope.first_name;
       $scope.last_name = $rootScope.last_name;
@@ -335,5 +335,41 @@ angular.module('starter.controllers', ['firebase','ionic'])
       else {
         $scope.phil = $rootScope.phil;
       }
+
+      $ionicModal.fromTemplateUrl('templates/comments.html', {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+
+      $scope.closeAdd = function() {
+        $scope.modal.hide();
+      };
+
+      $scope.viewComments = function() {
+        $scope.modal.show();
+        var name = $scope.first_name.toLowerCase() + " " + $scope.last_name.toLowerCase();
+        var ref = new Firebase("https://judge-prefs.firebaseio.com/comments/");
+        ref.orderByChild("fullName").equalTo(name).once("value", function(snapshot) {
+
+          if (snapshot.numChildren() === 0) {
+            $ionicPopup.alert({title: "No Comments Found."}).then(function(res) {
+              $scope.closeAdd();
+            });
+          } else {
+            var comments = {};
+            snapshot.forEach(function(childSnapshot) {
+              var key = childSnapshot.key();
+              var temp = {};
+              temp.comment = childSnapshot.child("comments").val();
+              var timestamp = childSnapshot.child('timestamp').val();
+              temp.timestamp = timestamp.slice(5, 7) + "-" + timestamp.slice(8, 10) + "-" + timestamp.slice(0, 4);
+              comments[key] = temp;
+            });
+            console.log(comments);
+            $scope.comments = comments;
+          }
+        });
+      };
 
 });

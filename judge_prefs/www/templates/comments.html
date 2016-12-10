@@ -1,0 +1,18 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h2 class="title">View Comments</h2>
+    <div class="buttons">
+      <button class="button button-positive button-outline" ng-click="closeAdd()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="card" ng-repeat="item in comments">
+      <div class="item item-divider item-text-wrap item-positive">
+        <h2 style="color:white">{{item.timestamp}}</h2>
+      </div>
+      <div class="item item-text-wrap">
+        <h3>{{item.comment}}</h3>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

@@ -39,8 +39,7 @@ for upload in db.child('user_uploads').get().each(): #iterates over database of 
 
         if (com):
             if (upload.val()['comments'] != "-1"):
-                newcomments['first_name'] = firstName #creates name for new judge
-                newcomments['last_name'] = lastName
+                newcomments['fullName'] = firstName + " " + lastName #creates name for new judge
                 newcomments['comments'] = upload.val()['comments'] #adds comments
                 ts = time.time() #does something
                 newcomments['timestamp'] = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S') #timestamps comment
