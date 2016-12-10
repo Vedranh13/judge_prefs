@@ -2,7 +2,7 @@
 import requests
 from bs4 import BeautifulSoup
 from judge import judge
-import dryscrape
+#import dryscrape
 class site(object):
     def __init__(self, url, proto = 'https://'):
         """This creates a repersentation of a site from a url such as www.tabroom.com. It assumes the site is https"""
